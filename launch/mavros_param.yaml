@@ -1,0 +1,10 @@
+# mavros_param.yaml
+# mavros:
+#   ros__parameters: {}
+#
+# mavros_router:
+#   ros__parameters: {}
+
+mavros_node:
+  ros__parameters:
+    fcu_url: udp://:14551@:14555

@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="underwater">
+
+    <include>
+      <uri>model://bluerov2</uri>
+      <pose>0 0 -2 0 0 0</pose>
+    </include>
+
+  </world>
+</sdf>

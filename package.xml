@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>tudelft_hackathon</name>
+  <version>0.0.0</version>
+  <description>TU Delft REMARO hackathon package</description>
+
+  <maintainer email="g.rezendesilva@tudelft.nl">Gustavo Rezende</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <build_export_depend>rclpy</build_export_depend>
+  <build_depend>rclpy</build_depend>
+  <exec_depend>rclpy</exec_depend>
+
+  <build_export_depend>mavros</build_export_depend>
+  <exec_depend>mavros</exec_depend>
+  <build_depend>mavros</build_depend>
+
+  <exec_depend>mavros_msgs</exec_depend>
+
+  <exec_depend>mavros_wrapper</exec_depend>
+
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
