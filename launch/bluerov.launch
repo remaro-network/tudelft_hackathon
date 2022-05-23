@@ -21,6 +21,16 @@
     <param name="target_component_id" value="$(var tgt_component)"/>
   </node>
 
+  <node pkg="ping360_sonar" exec="ping360_node">
+    <param name="connection_type" value="udp"/>
+    <param name="udp_address" value="192.168.2.2"/>
+    <param name="udp_port" value="9092"/>
+    <param name="fallback_emulated" value="False"/>
+    <param name="publish_eco" value="True"/>
+    <param name="publish_scan" value="True"/>
+    <param name="publish_image" value="True"/>
+  </node>
+
   <node pkg="tudelft_hackathon" exec="bluerov_agent.py"
     output="screen"/>
 
