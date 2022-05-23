@@ -1,6 +1,12 @@
 <launch>
-  <arg name="fcu_url" default="udp://:14551@:14555"/>
-  <arg name="gcs_url" default="udp://:14549@:14548"/>
+  <arg name="simulation" default="false"/>
+
+  <!--If using simulation use this fcu_url  -->
+  <arg name="fcu_url" default="udp://:14551@:14555" if="$(var simulation)"/>
+  <!--If using real robot use this fcu_url  -->
+  <arg name="fcu_url" default="udp://192.168.2.1:14550@192.168.2.2:14555" unless="$(var simulation)"/>
+
+  <arg name="gcs_url" default="udp://@localhost:14550"/>
   <arg name="system_id" default="255"/>
   <arg name="component_id" default="240"/>
   <arg name="tgt_system" default="1"/>
