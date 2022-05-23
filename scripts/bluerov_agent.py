@@ -24,19 +24,19 @@ def mission(ardusub):
 
     print("Initializing mission")
 
-    timer = ardusub.create_rate(0.5) # Hz
-
-    ardusub.toogle_rc_override(True)
-    ardusub.set_rc_override_channels(forward=0.5)
-    timer.sleep()
-    ardusub.set_rc_override_channels(lateral=0.5)
-    timer.sleep()
-    ardusub.set_rc_override_channels(forward=-0.5)
-    timer.sleep()
-    ardusub.set_rc_override_channels(lateral=-0.5)
-    timer.sleep()
-    ardusub.set_rc_override_channels(lateral=0)
-    ardusub.toogle_rc_override(False)
+    # timer = ardusub.create_rate(0.5) # Hz
+    #
+    # ardusub.toogle_rc_override(True)
+    # ardusub.set_rc_override_channels(forward=0.5)
+    # timer.sleep()
+    # ardusub.set_rc_override_channels(lateral=0.5)
+    # timer.sleep()
+    # ardusub.set_rc_override_channels(forward=-0.5)
+    # timer.sleep()
+    # ardusub.set_rc_override_channels(lateral=-0.5)
+    # timer.sleep()
+    # ardusub.set_rc_override_channels(lateral=0)
+    # ardusub.toogle_rc_override(False)
 
     print("Mission completed")
 

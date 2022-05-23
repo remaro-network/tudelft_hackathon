@@ -1,6 +1,6 @@
 from launch_ros.actions import Node
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression
 
@@ -97,5 +97,8 @@ def generate_launch_description():
         ),
         mavros_node,
         ping_360_node,
-        agent_node,
+        ExecuteProcess(
+            cmd=['ros2', 'bag', 'record', '-a'],
+            output='screen'
+        )
     ])
