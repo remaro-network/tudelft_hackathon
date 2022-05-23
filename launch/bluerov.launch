@@ -9,16 +9,16 @@
   <arg name="gcs_url" default="udp://@localhost:14550"/>
   <arg name="system_id" default="255"/>
   <arg name="component_id" default="240"/>
-  <arg name="tgt_system" default="1"/>
-  <arg name="tgt_component" default="1"/>
+  <arg name="target_system_id" default="1"/>
+  <arg name="target_component_id" default="1"/>
 
   <node pkg="mavros" exec="mavros_node">
     <param name="fcu_url" value="$(var fcu_url)"/>
     <param name="gcs_url" value="$(var gcs_url)"/>
     <param name="system_id" value="$(var system_id)"/>
     <param name="component_id" value="$(var component_id)"/>
-    <param name="target_system_id" value="$(var tgt_system)"/>
-    <param name="target_component_id" value="$(var tgt_component)"/>
+    <param name="target_system_id" value="$(var target_system_id)"/>
+    <param name="target_component_id" value="$(var target_component_id)"/>
   </node>
 
   <node pkg="ping360_sonar" exec="ping360_node">
