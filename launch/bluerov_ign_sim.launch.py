@@ -35,6 +35,7 @@ def generate_launch_description():
         package='ros_ign_bridge',
         executable='parameter_bridge',
         arguments=['lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan'],
+        remappings=[('/lidar','/scan')],
         output='screen'
     )
 
