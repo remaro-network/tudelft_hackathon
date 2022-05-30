@@ -1,8 +1,15 @@
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
 from launch_ros.actions import Node
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
 
 def generate_launch_description():
     simulation_arg = LaunchConfiguration('simulation')
@@ -76,6 +83,8 @@ def generate_launch_description():
         output='screen'
     )
 
+    pkg_tudelft_hackathon = get_package_share_directory('tudelft_hackathon')
+
     return LaunchDescription([
         simulation_arg,
         gcs_url_arg,
@@ -93,6 +102,13 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'fcu_url',
             default_value='udp://:14551@:14555',
+            condition=IfCondition(LaunchConfiguration('simulation'))
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(pkg_tudelft_hackathon,
+                                'launch',
+                                'bluerov_ign_sim.launch.py')),
             condition=IfCondition(LaunchConfiguration('simulation'))
         ),
         mavros_node,
