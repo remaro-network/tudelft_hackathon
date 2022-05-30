@@ -63,20 +63,6 @@ def generate_launch_description():
         }]
     )
 
-    ping_360_node = Node(
-        package='ping360_sonar',
-        executable='ping360_node',
-        parameters=[{
-            'connection_type': 'udp',
-            'udp_address': '192.168.2.2',
-            'udp_port': 9092,
-            'fallback_emulated': False,
-            'publish_echo': True,
-            'publish_scan': True,
-            'publish_image': True,
-        }],
-    )
-
     agent_node = Node(
         package='tudelft_hackathon',
         executable='bluerov_agent.py',
@@ -112,6 +98,19 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('simulation'))
         ),
         mavros_node,
-        ping_360_node,
+        Node(
+            package='ping360_sonar',
+            executable='ping360_node',
+            parameters=[{
+                'connection_type': 'udp',
+                'udp_address': '192.168.2.2',
+                'udp_port': 9092,
+                'fallback_emulated': False,
+                'publish_echo': True,
+                'publish_scan': True,
+                'publish_image': True,
+            }],
+            condition=IfCondition(LaunchConfiguration('simulation'))
+        ),
         agent_node,
     ])
