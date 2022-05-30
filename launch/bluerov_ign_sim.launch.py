@@ -27,7 +27,7 @@ def generate_launch_description():
     bluerov_spawn = Node(
         package='ros_ign_gazebo',
         executable='create',
-        arguments=['-world', 'min_pipes', '-file', 'bluerov2' ,'-z', '-2']
+        arguments=['-world', 'min_pipes', '-file', 'bluerov2_lidar' ,'-z', '-2']
     )
 
     # Bridge
