@@ -64,7 +64,7 @@ def generate_launch_description():
             'udp_address': '192.168.2.2',
             'udp_port': 9092,
             'fallback_emulated': False,
-            'publish_eco': True,
+            'publish_echo': True,
             'publish_scan': True,
             'publish_image': True,
         }],
