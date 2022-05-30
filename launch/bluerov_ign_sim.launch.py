@@ -20,8 +20,14 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
         launch_arguments={
-           'ign_args': '-r bluerov_pipeline.world'
+           'ign_args': '-r min_pipes.world'
         }.items(),
+    )
+
+    bluerov_spawn = Node(
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=['-world', 'min_pipes', '-file', 'bluerov2' ,'-z', '-2']
     )
 
     # Bridge
@@ -34,5 +40,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         ign_gazebo,
+        bluerov_spawn,
         bridge,
     ])
