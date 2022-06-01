@@ -24,10 +24,18 @@ def generate_launch_description():
         }.items(),
     )
 
+    #TODO: Pass x, y, z, R, P and Y as parameter
     bluerov_spawn = Node(
         package='ros_ign_gazebo',
         executable='create',
-        arguments=['-world', 'min_pipes', '-file', 'bluerov2_lidar' ,'-z', '-2']
+        arguments=[
+            '-world', 'walls',
+            '-file', 'bluerov2_lidar',
+            '-name', 'bluerov2',
+            '-x', '10',
+            '-y', '-6.0',
+            '-z', '-19.5',
+            '-Y', '-1.57']
     )
 
     # Bridge
