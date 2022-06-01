@@ -20,7 +20,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
         launch_arguments={
-           'ign_args': '-r min_pipes.world'
+           'ign_args': '-r room_walls.world'
         }.items(),
     )
 
