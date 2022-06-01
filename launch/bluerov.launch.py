@@ -110,7 +110,7 @@ def generate_launch_description():
                 'publish_scan': True,
                 'publish_image': True,
             }],
-            condition=IfCondition(LaunchConfiguration('simulation'))
+            condition=UnlessCondition(LaunchConfiguration('simulation'))
         ),
         agent_node,
     ])
