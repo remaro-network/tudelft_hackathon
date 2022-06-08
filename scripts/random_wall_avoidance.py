@@ -35,6 +35,7 @@ if __name__ == '__main__':
 
     ardusub = BlueROVArduSubWrapper("ardusub_node")
     ardusub.toogle_rc_override(True)
+    ardusub.set_rc_override_channels(forward=0.05)
 
     laser_subscriber = ardusub.create_subscription(
         LaserScan, '/scan', (lambda msg: laser_scan_cb(msg, ardusub)), 10)
