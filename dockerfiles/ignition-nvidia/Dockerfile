@@ -1,4 +1,4 @@
-FROM ignition
+FROM ignition:foxy
 
 ENV NVIDIA_VISIBLE_DEVICES \
    ${NVIDIA_VISIBLE_DEVICES:-all}
