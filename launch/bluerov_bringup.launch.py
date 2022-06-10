@@ -22,7 +22,7 @@ def generate_launch_description():
 
     simulation_arg = DeclareLaunchArgument(
         'simulation',
-        default_value='false'
+        default_value='true'
     )
 
     gcs_url_arg = DeclareLaunchArgument(
@@ -66,6 +66,7 @@ def generate_launch_description():
     agent_node = Node(
         package='tudelft_hackathon',
         executable='random_wall_avoidance.py',
+        # executable='bluerov_agent.py',
         output='screen'
     )
 
@@ -84,7 +85,7 @@ def generate_launch_description():
             default_value='udp://192.168.2.1:14550@192.168.2.2:14555',
             condition=UnlessCondition(LaunchConfiguration('simulation'))
         ),
-        # # Simulation
+        # Simulation
         DeclareLaunchArgument(
             'fcu_url',
             default_value='udp://:14551@:14555',
