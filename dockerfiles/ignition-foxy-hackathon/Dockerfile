@@ -1,4 +1,4 @@
-FROM ignition:foxy-nvidia
+FROM rezenders/ignition:foxy-nvidia
 
 RUN apt update && apt install -y --no-install-recommends \
   rapidjson-dev \
