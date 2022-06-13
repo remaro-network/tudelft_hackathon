@@ -123,10 +123,25 @@ $ ros2 launch tudelft_hackathon bluerov.launch.py simulation:=true
 
 ## Run it with docker
 
-Create network:
+Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
 
-```
+Create docker network:
+
+```Bash
 $ sudo docker network create ros_net
+```
+
+Run Ignition simulation + ardupilot SITL:
+
+```Bash
+$ xhost +local:root
+$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+```
+
+Run bluerov software:
+
+```Bash
+$ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
 ## Additional info
