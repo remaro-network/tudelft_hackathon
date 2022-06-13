@@ -127,3 +127,18 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+ros1_ws/build/*
+ros1_ws/install/*
+ros1_ws/devel/*
+ros1_ws/logs/*
+ros1_ws/site/*
+ros1_ws/.catkin_tools/*
+
+dockerfiles/ros1-2-ignition/ros2_ws/build/*
+dockerfiles/ros1-2-ignition/ros2_ws/install/*
+dockerfiles/ros1-2-ignition/ros2_ws/log/*
+dockerfiles/ros1-2-ignition/ros2_ws/site/*
+
+*.bag
+
