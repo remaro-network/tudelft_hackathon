@@ -34,12 +34,37 @@ if __name__ == '__main__':
     rclpy.init(args=sys.argv)
 
     ardusub = BlueROVArduSubWrapper("ardusub_node")
+
+    thread = threading.Thread(target=rclpy.spin, args=(ardusub, ), daemon=True)
+    thread.start()
+
+    service_timer = ardusub.create_rate(2)
+    while ardusub.status.mode != "MANUAL":
+        ardusub.set_mode("MANUAL")
+        service_timer.sleep()
+
+    print("Manual mode selected")
+
+    while ardusub.status.armed == False:
+        ardusub.arm_motors(True)
+        service_timer.sleep()
+
+    print("Thrusters armed")
+
+    print("Initializing mission")
+
     ardusub.toogle_rc_override(True)
     ardusub.set_rc_override_channels(forward=0.05)
 
     laser_subscriber = ardusub.create_subscription(
         LaserScan, '/scan', (lambda msg: laser_scan_cb(msg, ardusub)), 10)
 
-    rclpy.spin(ardusub)
+    rate = ardusub.create_rate(2)
+    try:
+        while rclpy.ok():
+            rate.sleep()
+    except KeyboardInterrupt:
+        pass
+
     ardusub.destroy_node()
     rclpy.shutdown()
