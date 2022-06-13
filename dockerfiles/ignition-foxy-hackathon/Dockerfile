@@ -1,6 +1,8 @@
-FROM rezenders/ignition:foxy-nvidia
+FROM rezenders/ignition:foxy-nvidia-ardusub
 
+USER root
 RUN apt update && apt install -y --no-install-recommends \
+  vim \
   rapidjson-dev \
   libboost-all-dev \
   python3-pip \
@@ -12,44 +14,49 @@ RUN apt update && apt install -y --no-install-recommends \
 
 RUN rosdep init
 
-WORKDIR /
+USER docker
+
+WORKDIR /home/docker/
 RUN git clone https://github.com/ArduPilot/ardupilot_gazebo.git -b ignition-garden
 
-WORKDIR /ardupilot_gazebo/build
-# RUN mkdir build && cd build
+WORKDIR /home/docker/ardupilot_gazebo
 
 RUN [ "/bin/bash","-c","source /ign_ws/install/setup.bash \
+            && mkdir build && cd build \
             && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo\
             && make"]
 
-ENV IGN_GAZEBO_SYSTEM_PLUGIN_PATH=/ardupilot_gazebo/build:${IGN_GAZEBO_SYSTEM_PLUGIN_PATH}
-ENV IGN_GAZEBO_RESOURCE_PATH=/ardupilot_gazebo/models:/ardupilot_gazebo/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+ENV IGN_GAZEBO_SYSTEM_PLUGIN_PATH=/home/docker/ardupilot_gazebo/build:${IGN_GAZEBO_SYSTEM_PLUGIN_PATH}
+ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/ardupilot_gazebo/models:/home/docker/ardupilot_gazebo/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
-WORKDIR /
+WORKDIR /home/docker/
 RUN git clone https://github.com/Rezenders/bluerov2_ignition.git
-ENV IGN_GAZEBO_RESOURCE_PATH=/bluerov2_ignition/models:/bluerov2_ignition/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/bluerov2_ignition/models:/home/docker/bluerov2_ignition/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
-WORKDIR /
+WORKDIR /home/docker/
 RUN git clone https://github.com/remaro-network/remaro_worlds.git -b ign-garden
-ENV IGN_GAZEBO_RESOURCE_PATH=/remaro_worlds/models:/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/remaro_worlds/models:/home/docker/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
-RUN mkdir -p /tudelft_hackathon_ws/src
+RUN mkdir -p /home/docker/tudelft_hackathon_ws/src
 
-WORKDIR /tudelft_hackathon_ws/src
+WORKDIR /home/docker/tudelft_hackathon_ws/src
 RUN git clone https://github.com/remaro-network/tudelft_hackathon.git
 
-WORKDIR /tudelft_hackathon_ws/
+WORKDIR /home/docker/tudelft_hackathon_ws/
+
+USER root
 RUN [ "/bin/bash","-c","source /opt/ros/foxy/setup.bash \
             && apt update && rosdep update \
             && rosdep install --from-paths src --ignore-src -r -y \
             && rm -rf /var/lib/apt/lists/"]
 
+USER docker
 RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 1' \
             && source /opt/ros/foxy/setup.bash \
             && colcon build --symlink-install"]
 
-WORKDIR /tudelft_hackathon_ws/
+WORKDIR /home/docker/tudelft_hackathon_ws/
 
-COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /home/docker/
+ENTRYPOINT ["/home/docker/entrypoint.sh"]
 CMD ["bash"]
