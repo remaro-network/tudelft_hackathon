@@ -118,7 +118,7 @@ $ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --c
 ```
 
 ```Bash
-$ ros2 launch tudelft_hackathon bluerov.launch.py simulation:=true
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
 ```
 
 ## Run it with docker
