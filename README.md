@@ -88,7 +88,7 @@ $ cd ~/tudelft_hackathon_ws
 Clone repos:
 ```Bash
 $ wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
-$ vcs import src < hackathon.rosintall --recursive
+$ vcs import src < hackathon.rosinstall --recursive
 ```
 
 Add this to your .bashrc
