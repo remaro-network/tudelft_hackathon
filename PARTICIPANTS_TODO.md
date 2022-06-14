@@ -43,7 +43,11 @@
 Suggestions:
 * Better avoidance algorithm
 * Adjust velocity parameters and sonar "field-of-view"
-* Prevent the bluerov to go over the walls
+* Test sonar data with SLAM algorithm (#4)
+* Add visual to bluerov in ignition (#8)
+* Prevent the bluerov to go over the walls (#12)
+* Change Ignition initial world camera position (#13)
+* Add model for bluerov2 heavy kit version (#14)
 * More elaborated world
 * Improve formatting
 * Improve documentation
