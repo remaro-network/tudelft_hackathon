@@ -10,7 +10,7 @@
             "type": "shell",
             "command": "colcon build --allow-overriding cpp_pubsub --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic", // --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic",
             // "command": "bash ./build.sh",
-            "options": {"cwd":"${workspaceFolder}/ros2/"},
+            "options": {"cwd":"${workspaceFolder}/ros2_ws/"},
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -23,7 +23,7 @@
             "type": "shell",
             "command": "colcon build --merge-install --symlink-install  --cmake-args '-DCMAKE_BUILD_TYPE=Debug' -Wall -Wextra -Wpedantic",
             // "command": "bash ./build.sh",
-            "options": {"cwd":"${workspaceFolder}/ros2/"},
+            "options": {"cwd":"${workspaceFolder}/ros2_ws/"},
             "group": "build",
             "problemMatcher": "$gcc"
         },

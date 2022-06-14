@@ -89,25 +89,8 @@ RUN apt update && apt install -y --no-install-recommends \
 RUN rosdep init
 
 WORKDIR /
-RUN git clone https://github.com/ArduPilot/ardupilot_gazebo.git -b ignition-garden
-
-WORKDIR /ardupilot_gazebo/build
-# RUN mkdir build && cd build
-
-RUN [ "/bin/bash","-c","source /ign_ws/install/setup.bash \
-            && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo\
-            && make"]
-
-ENV IGN_GAZEBO_SYSTEM_PLUGIN_PATH=/ardupilot_gazebo/build:${IGN_GAZEBO_SYSTEM_PLUGIN_PATH}
-ENV IGN_GAZEBO_RESOURCE_PATH=/ardupilot_gazebo/models:/ardupilot_gazebo/worlds:${IGN_GAZEBO_RESOURCE_PATH}
-
-WORKDIR /
-RUN git clone https://github.com/Rezenders/bluerov2_ignition.git
-ENV IGN_GAZEBO_RESOURCE_PATH=/bluerov2_ignition/models:/bluerov2_ignition/worlds:${IGN_GAZEBO_RESOURCE_PATH}
-
-WORKDIR /
-RUN git clone https://github.com/remaro-network/remaro_worlds.git -b ign-garden
-ENV IGN_GAZEBO_RESOURCE_PATH=/remaro_worlds/models:/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+# RUN git clone https://github.com/remaro-network/remaro_worlds.git -b ign-garden
+# ENV IGN_GAZEBO_RESOURCE_PATH=/remaro_worlds/models:/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
 RUN mkdir -p /tudelft_hackathon_ws/src
 
@@ -128,3 +111,6 @@ COPY . /tudelft_hackathon_ws/src/tudelft_hackathon/
 RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 1' \
 && source /opt/ros/foxy/setup.bash \
 && colcon build --symlink-install"]
+
+RUN apt-get update
+RUN apt-get -y install gcc-arm-none-eabi

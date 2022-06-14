@@ -1,3 +1,12 @@
 [submodule "dockerfiles/ros1-2-ignition/ardupilot"]
 	path = dockerfiles/ros1-2-ignition/ardupilot
 	url = https://github.com/ArduPilot/ardupilot.git
+[submodule "dockerfiles/ros1-2-ignition/ros2_ws/src/bluerov2_ignition"]
+	path = dockerfiles/ros1-2-ignition/ros2_ws/src/bluerov2_ignition
+	url = https://github.com/Rezenders/bluerov2_ignition.git
+[submodule "dockerfiles/ros1-2-ignition/ardupilot_gazebo"]
+	path = dockerfiles/ros1-2-ignition/ardupilot_gazebo
+	url = https://github.com/ArduPilot/ardupilot_gazebo
+[submodule "dockerfiles/ros1-2-ignition/ros2_ws/src/remaro_worlds"]
+	path = dockerfiles/ros1-2-ignition/ros2_ws/src/remaro_worlds
+	url = https://github.com/remaro-network/remaro_worlds.git
