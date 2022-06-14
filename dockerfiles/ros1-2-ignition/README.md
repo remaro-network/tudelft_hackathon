@@ -86,3 +86,9 @@ Run Ignition with the BlueROV
 ```
 ign gazebo auv_controls.sdf
 ```
+# Troubleshooting
+
+- If while running `ardupilot` you get the error `[Errno 2] No such file or directory: 'mavproxy.py'`, try running:
+  ```
+  . ~/.profile
+ ``` 
