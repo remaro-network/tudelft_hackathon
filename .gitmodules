@@ -1,0 +1,3 @@
+[submodule "dockerfiles/ros1-2-ignition/ardupilot"]
+	path = dockerfiles/ros1-2-ignition/ardupilot
+	url = https://github.com/ArduPilot/ardupilot.git
