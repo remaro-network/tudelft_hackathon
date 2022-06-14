@@ -19,7 +19,7 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-rec
 
 RUN mkdir -p /ign_ws/src
 WORKDIR /ign_ws/src
-RUN wget https://raw.githubusercontent.com/clydemcqueen/bluerov2_ignition/clyde_docker/garden.repos
+RUN wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos
 RUN vcs import < garden.repos
 
 RUN wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg

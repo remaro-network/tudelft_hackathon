@@ -51,7 +51,7 @@ $ vcs import < collection-garden.yaml
 Use this one:
 
 ```Bash
-$ wget https://raw.githubusercontent.com/clydemcqueen/bluerov2_ignition/clyde_docker/garden.repos
+$ wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos
 $ vcs import < garden.repos
 ```
 
@@ -88,7 +88,7 @@ $ cd ~/tudelft_hackathon_ws
 Clone repos:
 ```Bash
 $ wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
-$ vcs import src < hackathon.rosintall --recursive
+$ vcs import src < hackathon.rosinstall --recursive
 ```
 
 Add this to your .bashrc
@@ -118,7 +118,7 @@ $ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --c
 ```
 
 ```Bash
-$ ros2 launch tudelft_hackathon bluerov.launch.py simulation:=true
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
 ```
 
 ## Run it with docker
