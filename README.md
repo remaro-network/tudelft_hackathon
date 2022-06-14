@@ -51,7 +51,7 @@ $ vcs import < collection-garden.yaml
 Use this one:
 
 ```Bash
-$ wget https://raw.githubusercontent.com/clydemcqueen/bluerov2_ignition/clyde_docker/garden.repos
+$ wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos
 $ vcs import < garden.repos
 ```
 
