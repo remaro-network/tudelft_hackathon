@@ -26,9 +26,9 @@ Note that ardupilot, bluerov2_ignition and remaro_worlds are included in this re
 ## Some things to keep in mind
 
 ### ROS1 bridge for ROS2
-This repo is extended to include both ROS1 noetic and ROS2 foxy. The ros1/ workspace is set up to build ROS1 packages with catkin for noetic and the ros2/ workspace is set up to build ROS2 packages with colcon. 
+This repo is extended to include both ROS1 noetic and ROS2 foxy. The ros1/ workspace is set up to build ROS1 packages with catkin for noetic and the ros2/ workspace is set up to build ROS2 packages with colcon.
 
-The script [`ros2/ros1_bridge.sh`](ros2/ros1_bridge.sh) starts the dynamic ros1/2 bridge to forward messages between nodes of both ros versions. 
+The script [`ros2/ros1_bridge.sh`](ros2/ros1_bridge.sh) starts the dynamic ros1/2 bridge to forward messages between nodes of both ros versions.
 
 ### Shortcuts
 ROS need sourcing of its setup files. Since we have both ROS1 and 2, we need to source the ROS versions that we are using (usually ROS2).  Some shortcuts are defined in the .bashrc file for convenience. They are listed here:  
@@ -41,10 +41,19 @@ In this hackaton, you will source ROS2 (foxy), and therefore type `sf` and `s`. 
 
 Now, let's get hands-on!
 
+# Install everything that is necessary
+
+- Install docker on your machine. You can find instructions [here](https://docs.docker.com/engine/install/ubuntu/)
+- Allow non-root users to manage docker. Instructions [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+- Install VSCode. Instructions [here](https://code.visualstudio.com/download)
+
 # Open the container in vscode
 - Clone the hackaton's repo in your computer:
+```Bash
+$ git clone https://github.com/remaro-network/tudelft_hackathon.git
+```
 - Go to the folder containing this Dev container (i.e. ros1-2-ignition folder)
-- Open it from VSCode (File->Open Folder). 
+- Open it from VSCode (File->Open Folder).
 - click on the little green square in the bottom left corner, which should bring up the container dialog
 
 ![template_vscode_bottom](https://user-images.githubusercontent.com/6098197/91332638-5d47b780-e781-11ea-9fb6-4d134dbfc464.png)
@@ -77,6 +86,11 @@ Lucky for you, we've set up a bash file that does this steps -almost entirely- f
     ```
 
 # Test that everything is working!
+Before running ardupilot the first time, run:
+```
+. ~/.profile
+```
+
 Run Ardupilot with software in the loop (SITL):
 ```
 cd ardupilot
@@ -91,4 +105,4 @@ ign gazebo auv_controls.sdf
 - If while running `ardupilot` you get the error `[Errno 2] No such file or directory: 'mavproxy.py'`, try running:
   ```
   . ~/.profile
- ``` 
+ ```
