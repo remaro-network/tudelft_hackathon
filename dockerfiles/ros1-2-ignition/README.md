@@ -64,7 +64,7 @@ Run Ardupilot with software in the loop (SITL):
 ```
 $ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
 ```
-Run Ignition with the BlueROV
+In another terminal (in terminator you can use ctrl+shit+e to split the terminal vertically) run:
 ```
-ign gazebo auv_controls.sdf
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
 ```
