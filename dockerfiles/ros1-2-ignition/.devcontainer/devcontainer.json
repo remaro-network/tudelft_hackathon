@@ -6,7 +6,7 @@
 			"WORKSPACE": "${containerWorkspaceFolder}"
 		}
 	},
-	"remoteUser": "ros",
+	"remoteUser": "docker",
 	"runArgs": [
 		"--network=host",
 		"--cap-add=SYS_PTRACE",
