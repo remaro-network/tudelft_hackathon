@@ -65,8 +65,8 @@ def generate_launch_description():
 
     agent_node = Node(
         package='tudelft_hackathon',
-        executable='random_wall_avoidance.py',
-        # executable='bluerov_agent.py',
+        # executable='random_wall_avoidance.py',
+        executable='bluerov_agent.py',
         output='screen'
     )
 
@@ -103,6 +103,7 @@ def generate_launch_description():
             package='ping360_sonar',
             executable='ping360_node',
             parameters=[{
+                'angle_sector' : 180,
                 'connection_type': 'udp',
                 'udp_address': '192.168.2.2',
                 'udp_port': 9092,
