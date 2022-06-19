@@ -1,5 +1,5 @@
 # ROS2 Workspace for REMARO's hackaton
-This template will get you set up using ROS1 together with ROS2 in VSCode as your IDE.
+This template will get you set up using ROS2 in VSCode as your IDE.
 It is structured as follows:
 ```
 ├──ros1-2-ignition
@@ -8,9 +8,6 @@ It is structured as follows:
 |  |  └── ...
 │  ├──ardupilot_gazebo
 |  |  └── ...
-│  ├──ros1_ws                       # ROS Noetic workspace
-|  |  ├── src
-|  |  |   └── ...
 │  ├──ros2_ws                       # ROS Foxy workspace
 |  |  ├── src
 |  |  |   ├──bluerov2_ignition      # Code for Bluerov2 simulation in Ignition
@@ -24,11 +21,6 @@ It is structured as follows:
 Note that ardupilot, bluerov2_ignition and remaro_worlds are included in this repository as git submodules.
 
 ## Some things to keep in mind
-
-### ROS1 bridge for ROS2
-This repo is extended to include both ROS1 noetic and ROS2 foxy. The ros1/ workspace is set up to build ROS1 packages with catkin for noetic and the ros2/ workspace is set up to build ROS2 packages with colcon.
-
-The script [`ros2/ros1_bridge.sh`](ros2/ros1_bridge.sh) starts the dynamic ros1/2 bridge to forward messages between nodes of both ros versions.
 
 ### Shortcuts
 ROS need sourcing of its setup files. Since we have both ROS1 and 2, we need to source the ROS versions that we are using (usually ROS2).  Some shortcuts are defined in the .bashrc file for convenience. They are listed here:  
