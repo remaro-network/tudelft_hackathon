@@ -16,6 +16,18 @@ You can find some slides with useful information here (**ADD SLIDES LINK**)
 
 You can find a system architecture of the system developed here (**ADD ARCHITECTURE LINK**)
 
+## Summary
+- [Computer setup](https://github.com/remaro-network/tudelft_hackathon#computer-setup)
+- [Bluerov setup](https://github.com/remaro-network/tudelft_hackathon#bluerov-setup)
+- [Install prerequisites to run with docker](https://github.com/remaro-network/tudelft_hackathon#install-prerequisites)
+- [Install locally](https://github.com/remaro-network/tudelft_hackathon#install-locally)
+- [Run with docker](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker)
+- [Run with docker with VSCode ](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker)
+- [Run locally](https://github.com/remaro-network/tudelft_hackathon#run-it-locally)
+- [Explanation](https://github.com/remaro-network/tudelft_hackathon#explanation)
+- [Additional information](https://github.com/remaro-network/tudelft_hackathon#additional-information)
+- [Acknowledgments](https://github.com/remaro-network/tudelft_hackathon#acknowledgments)
+
 ## Setup
 
 Tested with:
@@ -34,7 +46,28 @@ Tested with:
 
 ## Installation
 
-### Install ignition
+There are 3 options to use this repo.
+Install everything locally in your computer. This will require some effort, but when done should be easier to use.
+Run everything with docker (read disclaimer bellow):
+  - Via the CLI. This option should be faster to reproduce everything, but is a little bit annoying for development.
+  - Using VSCode. Requires installing VSCode. Should be easier way to use everything. (work in progress)
+
+**Disclaimer**
+Running docker images with graphical user interface is a little bit trick and might not work in all systems.
+We tested in a system with ubuntu 20.04 and with a NVIDIA gpu.
+It might not work on systems with AMD gpus, and on MAC.
+We are going to try to fix this problem until the hackathon, but it is not guaranteed.
+In those cases go for the [local installation](https://github.com/remaro-network/tudelft_hackathon#install-locally).
+
+### Install prerequisites to run with docker
+
+- Install docker on your machine. You can find instructions [here](https://docs.docker.com/engine/install/ubuntu/)
+- Allow non-root users to manage docker. Instructions [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+- Install VSCode. Instructions [here](https://code.visualstudio.com/download)
+- Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
+
+### Install locally
+#### Install ignition
 
 It is necessary to build Ignition from source since we require this [patch](https://github.com/gazebosim/gz-sim/pull/1402), which is not included in any of the available releases yet.
 
@@ -55,7 +88,7 @@ $ wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden
 $ vcs import < garden.repos
 ```
 
-### Install ardusub
+#### Install ardusub
 
 Instructions can be found [here](https://ardupilot.org/dev/docs/building-setup-linux.html#building-setup-linux)
 
@@ -73,11 +106,11 @@ $ . ~/.profile
 
 If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs/building-setup-mac.html)
 
-### Install ardusub_plugin
+#### Install ardusub_plugin
 
 Install ardupilot_gazebo plugin following the instructions in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
 
-### Install hackathon workspace
+#### Install hackathon workspace
 
 Create new workspace:
 ```Bash
@@ -110,18 +143,7 @@ $ cd ~/tudelft_hackathon_ws/
 $ colcon build --symlink-install
 ```
 
-## Run it locally
-
-ArduSub SITL:
-```Bash
-$ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
-```
-
-```Bash
-$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
-```
-
-## Run it with docker
+## Run it with docker via CLI
 
 Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
 
@@ -144,6 +166,37 @@ Run bluerov software:
 $ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
+### Development with docker via cli
+
+To add your modifications into the docker images you need to rebuild the relevant docker images.
+In this case, run the `build-dev-images.sh` script to rebuild them. And make sure to substitute in the `docker run` commands the images from rezenders to you local images. I.e: `rezenders/ignition:hackathon` -> `ignition:hackathon-dev` and  `rezenders/ros-foxy-hackathon` -> `ros-foxy-hackathon:dev`
+
+## Run it with docker with VSCode
+
+Check instructions [here](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/dockerfiles/ros1-2-ignition/README.md)
+
+## Run it locally
+
+### Simulation
+ArduSub SITL:
+```Bash
+$ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
+```
+
+```Bash
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
+```
+
+### Bluerov2
+
+```Bash
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
+```
+
+## Explanation
+
+**WORK IN PROGRESS**
+
 ## Additional info
 
 ### SSH into bluerov (blueOS)
@@ -153,7 +206,7 @@ Password: raspberry
 $ ssh pi@192.168.2.2
 ```
 
-## Acknowledgements
+## Acknowledgments
 This project has received funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 956200.
 
 Pleave visit [our website](https://remaro.eu/) for more info on our project.
