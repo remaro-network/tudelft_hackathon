@@ -58,43 +58,13 @@ VSCode will build the dockerfile inside of `.devcontainer` for you.  If you open
 
 - If you want to work in your docker container from terminator (which I strongly recommend), type `terminator` in the VSCode terminal.
 
-# Setup Ardupilot and ROS in your docker
-Lucky for you, we've set up a bash file that does this steps -almost entirely- for you!
-
-- Run the file `setup-ign-ardupilot-sitl.sh` to setup the ignition worlds and ardupilot installation:
-    ```
-    chmod +x setup-ign-ardupilot-sitl.sh
-    ./setup-ign-ardupilot-sitl.sh
-    ```
-- Build your ROS2 packages:
-    ```
-    cd ros2_ws
-    colcon build
-    ```
-- Source your ROS2 installation and your local ROS packages by using the shortcuts metioned at the beginning of this README:
-    ```
-    sf # source foxy
-    s  # source your ROS packages
-    ```
-
 # Test that everything is working!
-Before running ardupilot the first time, run:
-```
-. ~/.profile
-```
 
 Run Ardupilot with software in the loop (SITL):
 ```
-cd ardupilot
-Tools/autotest/sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
+$ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
 ```
 Run Ignition with the BlueROV
 ```
 ign gazebo auv_controls.sdf
 ```
-# Troubleshooting
-
-- If while running `ardupilot` you get the error `[Errno 2] No such file or directory: 'mavproxy.py'`, try running:
-  ```
-  . ~/.profile
- ```
