@@ -20,13 +20,15 @@
 
 #### Install ROS2 workspace for the hackathon locally, or run the docker image beforehand to make sure it is working
 
-* [Install locally instructions](https://github.com/remaro-network/tudelft_hackathon#installation)
-* [Docker instructions](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker) (**TODO**)
+Read [this](https://github.com/remaro-network/tudelft_hackathon#installation) first
 
-#### Install Ignition locally, or run the Ignition docker image beforehand to make sure it is working
+* [Install locally instructions](https://github.com/remaro-network/tudelft_hackathon#install-locally)
+* Docker:
+  - [Install Docker prereqs](https://github.com/remaro-network/tudelft_hackathon#install-prerequisites-to-run-with-docker)
+  - [Docker CLI instructions](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker-via-cli)
+  - [Docker with VSCode instructions](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker-with-vscode)
 
-* [Install locally instructions](https://github.com/remaro-network/tudelft_hackathon#installation)
-* [Docker instructions](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker) (**TODO**)
+**Bugs:** If you find bugs, please open an Issue with a detailed explanation of the problem, or message @rezenders.
 
 #### For the more interested participants, reproduce everything and suggest how to improve the training
 
@@ -41,6 +43,7 @@
 
 #### Improve the system
 Suggestions:
+* Random avoidance algorithm (solution on 6a6d8c2)
 * Better avoidance algorithm
 * Adjust velocity parameters and sonar "field-of-view"
 * Test sonar data with SLAM algorithm ([#4](https://github.com/remaro-network/tudelft_hackathon/issues/4))
