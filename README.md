@@ -195,7 +195,7 @@ $ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
 
 ## Explanation
 
-**WORK IN PROGRESS**
+![System architecture](https://user-images.githubusercontent.com/20564040/174609607-5b630172-8570-4368-b3a9-f71c229c6d25.png)
 
 ## Additional info
 
