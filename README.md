@@ -197,7 +197,8 @@ $ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
 
 Simplified system architecture:
 
-![System architecture](https://user-images.githubusercontent.com/20564040/174609607-5b630172-8570-4368-b3a9-f71c229c6d25.png)
+![System architecture](https://user-images.githubusercontent.com/20564040/174649275-41a2d0bd-54ed-485f-bfcb-36ffe94dd11c.png)
+
 
 The system was designed to be used both with a real or simulated BlueROV2. When
 used with a simulation, the left nodes are deployed. And when used with the real
