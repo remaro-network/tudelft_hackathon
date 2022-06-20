@@ -195,7 +195,71 @@ $ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
 
 ## Explanation
 
-![System Architecture](https://user-images.githubusercontent.com/20564040/174612221-5aad2b8c-0d9c-4a1f-9cf2-17dbd005f1cd.png)
+Simplified system architecture:
+
+![System architecture](https://user-images.githubusercontent.com/20564040/174609607-5b630172-8570-4368-b3a9-f71c229c6d25.png)
+
+The system was designed to be used both with a real or simulated BlueROV2. When
+used with a simulation, the left nodes are deployed. And when used with the real
+robot the right nodes are deployed.The agent and MAVROS nodes are always deployed.
+
+First, let's take a look on how the real BlueROV2 works, then we see how the simulation
+is setup to mimic it.
+
+### Real BlueROV2
+
+**BlueROV2:** The BlueROV2 that is going to be used for the hackathon has the [heavy configuration](https://bluerobotics.com/store/rov/bluerov2-upgrade-kits/brov2-heavy-retrofit/). It is equipped with the [Ping 360](https://bluerobotics.com/store/sensors-sonars-cameras/sonar/ping360-sonar-r1-rp/) mechanical scanning sonar mounted in the [standard location](https://bluerobotics.com/learn/ping360-installation-guide-for-the-bluerov2/#mounting-the-ping360-to-the-embluerov2em-frame-heavy). And ArduSub runs on a [Pixhawk](https://bluerobotics.com/store/comm-control-power/control/pixhawk-r1-rp/).
+
+**Ping360 sonar driver:** To get data from the sonar the [ping360_sonar](https://github.com/CentraleNantesRobotics/ping360_sonar) ROS2 package is being used. It provides data in the following topics:
+
+| Topic         | Message type  | Description   |
+| ------------- | ------------- | ------------- |
+| /scan_image   | [sensor_msgs/Image](https://github.com/ros2/common_interfaces/blob/master/sensor_msgs/msg/Image.msg)  | The generated sonar image in gray level|
+| /echo  | [ping360_sonar_msg/SonarEcho](https://github.com/CentraleNantesRobotics/ping360_sonar/blob/ros2/ping360_sonar_msgs/msg/SonarEcho.msg)  | Raw sonar data|
+| /scan  | [sensor_msgs/LaserScan](https://github.com/ros2/common_interfaces/blob/master/sensor_msgs/msg/LaserScan.msg)  | Publishes a LaserScan msg with ranges detected above a certain intensity threshold (0-255). The intensities of the message are scaled down to (0,1)|
+
+Using this package, the Ping360 sonar takes between 6 and 10 seconds to complete a 360 degree rotation.
+
+**ArduSub:** According to their [website](https://www.ardusub.com/) ArduSub is "is a fully-featured open-source solution for remotely operated underwater vehicles (ROVs) and autonomous underwater vehicles (AUVs). ArduSub is a part of the [ArduPilot](https://ardupilot.org/) project, and was originally derived from the ArduCopter code. ArduSub has extensive capabilities out of the box including feedback stability control, depth and heading hold, and autonomous navigation".
+
+With the current configuration, BlueROV2 is not able to calculate its 3D position as there are no sensors that provide enough information for this, such as DVL, underwater GPS, etc.
+Thus, it is only possible to operate the robot using [flight modes](https://ardupilot.org/copter/docs/flight-modes.html#gps-dependency) that don't require positioning data, such as MANUAL, STABILIZE, and DEPTH HOLD. See [ArduSub flight modes](https://www.ardusub.com/reference/ardusub/features-while-in-operation.html#flight-modes).
+Consequently, it is not possible to send waypoints or velocity commands to the robot, the only way to operate it is by overriding the [RC inputs](https://www.ardusub.com/developers/rc-input-and-output.html#rc-inputs).
+
+**MAVROS:** The [MAVROS](https://github.com/mavlink/mavros) package is used to bridge the communication between ROS and mavlink, which is the communication protocol used by ArduSub. Which means MAVROS can be used as a bridge between ROS and ArduSub. To connect it to ArduSub it necesary to set the following parameters:
+- `fcu_url`: Address of the flight controller unit. For this case: `udp://192.168.2.1:14550@192.168.2.2:14555`
+
+MAVROS provides an extensive number of topics and services to interact with autopilots, you can check the full list [here](http://wiki.ros.org/mavros). For our use case, the topics and services being used are:
+
+| Topic         | Message type      | Description   |
+| ------------- | -------------     | ------------- |
+| mavros/state   | [mavros_msgs/State](https://github.com/mavlink/mavros/blob/ros2/mavros_msgs/msg/State.msg) |Provides the FCU state |
+| mavros/rc/override  | [mavros_msgs/OverrideRCIn](https://github.com/mavlink/mavros/blob/ros2/mavros_msgs/msg/OverrideRCIn.msg) | Send RC override message to FCU |
+
+| Service         | Message type      | Description   |
+| ------------- | -------------     | ------------- |
+| mavros/set_mode |[mavros_msgs/SetMode](https://github.com/mavlink/mavros/blob/ros2/mavros_msgs/srv/SetMode.srv)| Set FCU flight mode |
+| mavros/cmd/arming |[mavros_msgs/CommandBool](https://github.com/mavlink/mavros/blob/ros2/mavros_msgs/srv/CommandBool.srv)| Change arming status|
+
+
+To simplify interactions with MAVROS, a [wrapper](https://github.com/remaro-network/mavros_wrapper) was setup with the basic functionalities needed for this hackathon. It works like this:
+
+```Python
+from mavros_wrapper.ardusub_wrapper import * # Import wrapper
+
+ardusub = BlueROVArduSubWrapper("ardusub_node") # create new instance with desired node name
+status = ardusub.status # to get FCU status
+ardusub.set_mode("MANUAL") # set FCU flight mode to MANUAL
+ardusub.arm_motors(True) # arm motors
+ardusub.toogle_rc_override(True) # start overriding RC
+ardusub.set_rc_override_channels(forward=0.5) # set values to override
+```
+
+**Agent:**
+- bluerov_agent
+- random_wall_avoidance
+
+### Simulated BlueROV2
 
 ## Additional info
 
