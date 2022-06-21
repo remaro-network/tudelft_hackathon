@@ -199,7 +199,6 @@ Simplified system architecture:
 
 ![System architecture](https://user-images.githubusercontent.com/20564040/174649275-41a2d0bd-54ed-485f-bfcb-36ffe94dd11c.png)
 
-
 The system was designed to be used both with a real or simulated BlueROV2. When
 used with a simulation, the left nodes are deployed. And when used with the real
 robot the right nodes are deployed.The agent and MAVROS nodes are always deployed.
@@ -256,11 +255,42 @@ ardusub.toogle_rc_override(True) # start overriding RC
 ardusub.set_rc_override_channels(forward=0.5) # set values to override
 ```
 
-**Agent:**
-- bluerov_agent
-- random_wall_avoidance
+**Agent:** The agent node is the one that decides how the robot should behave.
+For this hackathon, we setup two different nodes with simple behaviors:
+
+The [bluerov_agent](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/bluerov_agent.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then go around in a square path once. For this, the agent uses the topics & services listed in the mavros section.
+
+The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then starts moving forward. The agent subscribes to the sonar topic and every time it receives sonar readings it checks if there is an obstacle in its front, e.g. 180°, closer than a certain threshold, e.g. 1m, and in case there is it rotates randomly until there are no more obstacle. (This node should be completed during the hackathon, a solution can be found in commit 72d668c). For this, the agent uses the topics & services listed in the mavros section, and the `/scan` topic described in the ping360 driver section.
 
 ### Simulated BlueROV2
+
+**Simulated BlueROV2:** To simulate the BlueROV2 we are using Gazebo (Ignition). Unfortunately, until the moment of writing this readme, there is no sonar plugin for Ignition. Thus, we are using a lidar plugin instead, configured to have the same speed and measurement range as the Ping360 sonar. The bluerov2 model is [here](https://github.com/Rezenders/bluerov2_ignition/blob/main/models/bluerov2/model.sdf) and the bluerov2 model with a lidar is [here](https://github.com/Rezenders/bluerov2_ignition/blob/main/models/bluerov2_lidar/model.sdf). The world being used for the simulation can be found [here](https://github.com/remaro-network/remaro_worlds/blob/ign-garden/worlds/room_walls.world), note that there is a buoyancy plugin that sets the "water" density to 1000kg/m3.
+
+**Simulated "sonar" bridge:**  In order to have access to the simulated lidar data with ROS2 we run a bridge between ignition transport and ROS2. Something like this:
+
+Via command line:
+```
+ros2 run ros_ign_bridge parameter_bridge lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan -r /lidar:=/scan
+```
+
+With launch file:
+```
+package='ros_ign_bridge',
+    executable='parameter_bridge',
+    arguments=['lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan'],
+    remappings=[('/lidar','/scan')],
+    output='screen'
+```
+
+Note that the topic where the lidar data is published has the same name (`/scan`) and type (`sensor_msgs/LaserScan`) as the topic published by the ping360 driver.
+
+**ArduSub Sofware In The Loop (SITL):** Since when running the simulation we don't have a board with an autopilot installed, we simulate Ardusub as a SITL.
+
+**Ardupilot gazebo plugin:** Bridge between Ignition and Ardusub. More info can be found [here](https://gazebosim.org/api/gazebo/7.0/ardupilot.html).
+
+**MAVROS:** The only difference is that for the simulation we need to use a different `fcu_url`. In this case, `udp://:14551@:14555`.
+
+**Agent:** Since all the interfaces are the same, the agent nodes are the same for both simulation and the real robot.
 
 ## Additional info
 
