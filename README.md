@@ -66,6 +66,9 @@ In those cases go for the [local installation](https://github.com/remaro-network
 - Install VSCode. Instructions [here](https://code.visualstudio.com/download)
 - Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
 
+### Configure computer to connect with the BlueROV2
+Follow [Bluerobotics instructions](https://bluerobotics.com/learn/bluerov2-software-setup/#software-introduction)
+
 ### Install locally
 #### Install ignition
 
