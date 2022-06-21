@@ -1,4 +1,4 @@
-FROM rezenders/ignition:foxy-nvidia-ardusub
+FROM rezenders/ignition:foxy-ardusub
 
 USER root
 RUN apt update && apt install -y --no-install-recommends \

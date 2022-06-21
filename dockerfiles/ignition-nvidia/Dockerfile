@@ -1,4 +1,4 @@
-FROM rezenders/ignition:foxy
+FROM rezenders/ignition:hackathon
 
 ENV NVIDIA_VISIBLE_DEVICES \
    ${NVIDIA_VISIBLE_DEVICES:-all}
