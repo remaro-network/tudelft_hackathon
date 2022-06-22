@@ -1,5 +1,5 @@
 # ROS2 Workspace for REMARO's hackaton
-This template will get you set up using ROS1 together with ROS2 in VSCode as your IDE.
+This template will get you set up using ROS2 in VSCode as your IDE.
 It is structured as follows:
 ```
 ├──ros1-2-ignition
@@ -8,9 +8,6 @@ It is structured as follows:
 |  |  └── ...
 │  ├──ardupilot_gazebo
 |  |  └── ...
-│  ├──ros1_ws                       # ROS Noetic workspace
-|  |  ├── src
-|  |  |   └── ...
 │  ├──ros2_ws                       # ROS Foxy workspace
 |  |  ├── src
 |  |  |   ├──bluerov2_ignition      # Code for Bluerov2 simulation in Ignition
@@ -24,11 +21,6 @@ It is structured as follows:
 Note that ardupilot, bluerov2_ignition and remaro_worlds are included in this repository as git submodules.
 
 ## Some things to keep in mind
-
-### ROS1 bridge for ROS2
-This repo is extended to include both ROS1 noetic and ROS2 foxy. The ros1/ workspace is set up to build ROS1 packages with catkin for noetic and the ros2/ workspace is set up to build ROS2 packages with colcon.
-
-The script [`ros2/ros1_bridge.sh`](ros2/ros1_bridge.sh) starts the dynamic ros1/2 bridge to forward messages between nodes of both ros versions.
 
 ### Shortcuts
 ROS need sourcing of its setup files. Since we have both ROS1 and 2, we need to source the ROS versions that we are using (usually ROS2).  Some shortcuts are defined in the .bashrc file for convenience. They are listed here:  
@@ -66,43 +58,13 @@ VSCode will build the dockerfile inside of `.devcontainer` for you.  If you open
 
 - If you want to work in your docker container from terminator (which I strongly recommend), type `terminator` in the VSCode terminal.
 
-# Setup Ardupilot and ROS in your docker
-Lucky for you, we've set up a bash file that does this steps -almost entirely- for you!
-
-- Run the file `setup-ign-ardupilot-sitl.sh` to setup the ignition worlds and ardupilot installation:
-    ```
-    chmod +x setup-ign-ardupilot-sitl.sh
-    ./setup-ign-ardupilot-sitl.sh
-    ```
-- Build your ROS2 packages:
-    ```
-    cd ros2_ws
-    colcon build
-    ```
-- Source your ROS2 installation and your local ROS packages by using the shortcuts metioned at the beginning of this README:
-    ```
-    sf # source foxy
-    s  # source your ROS packages
-    ```
-
 # Test that everything is working!
-Before running ardupilot the first time, run:
-```
-. ~/.profile
-```
 
 Run Ardupilot with software in the loop (SITL):
 ```
-cd ardupilot
-Tools/autotest/sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
+$ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
 ```
-Run Ignition with the BlueROV
+In another terminal (in terminator you can use ctrl+shit+e to split the terminal vertically) run:
 ```
-ign gazebo auv_controls.sdf
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
 ```
-# Troubleshooting
-
-- If while running `ardupilot` you get the error `[Errno 2] No such file or directory: 'mavproxy.py'`, try running:
-  ```
-  . ~/.profile
- ```
