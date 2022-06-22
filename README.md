@@ -1,12 +1,24 @@
-# Underwater robotics hackathon
+# REMARO Summer School Delft 2022 - Underwater robotics hackathon
 
-The intended goal of this hackathon is to provide an initial training on how to
-setup a underwater robot, such as the [bluerov2](https://bluerobotics.com/store/rov/bluerov2/),
-to run with ROS2, and how to simulate it with Ignition.
+The overall goal of this hackathon is to provide hands-on training for the Early Stage Researchers (ESRs) 
+of the REMARO network (but not limited to) on how to architect, program, simulate and implement basic 
+underwater robot functionalities.
 
-The idea is to perform a simple mission of avoiding walls using sonar readings.
-A initial mission is provided and the goal is to improve this mission throughout
-the training.
+More specifically, the goals for ESRs with background in:
+* **Mathematics/Computer Science:** Learn basic robotics workflow and commonly used tools
+* **Robotics:** learn cutting-edge tools, and details on how to develop robot-specific system
+
+Thus, this training will address how to setup an underwater robot, such as the [BlueROV2](https://bluerobotics.com/store/rov/bluerov2/),
+to run with ROS2, and how to simulate it with Gazebo (Ignition). The idea is that participants 
+work with a simulation first and then test what is developed in a real BlueROV2, with this they 
+can begin to understand the challenges and differences of deploying a robot in simulation and in the real world.
+
+The use case selected for this training is “wall avoidance”. Basically, the goal is for the robot 
+to navigate an environment and not crash into walls using only sonar data. An initial code for a random 
+avoidance mission is provided with missing parts, and the idea is for participants to complete the 
+code and work to develop better missions through training or improve the system in general.
+
+More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md) file 
 
 You can check the intended behavior on the video:
 
