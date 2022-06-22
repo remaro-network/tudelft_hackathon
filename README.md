@@ -22,7 +22,7 @@ More details on instructions for participants can be found in the [PARTICIPANTS_
 
 You can check the intended behavior on the video:
 
-**ADD VIDEO HERE**
+[![Youtube video](https://user-images.githubusercontent.com/20564040/175087210-6706607d-c2db-4b25-888e-1973e3d093fb.png)](https://www.youtube.com/watch?v=Zv-int_BIJw)
 
 You can find some slides with useful information here (**ADD SLIDES LINK**)
 
