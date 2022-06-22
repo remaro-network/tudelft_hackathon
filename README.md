@@ -18,7 +18,7 @@ to navigate an environment and not crash into walls using only sonar data. An in
 avoidance mission is provided with missing parts, and the idea is for participants to complete the 
 code and work to develop better missions through training or improve the system in general.
 
-More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md) file 
+More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md) 
 
 You can check the intended behavior on the video:
 
