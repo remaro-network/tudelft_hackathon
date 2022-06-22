@@ -98,7 +98,7 @@ Instructions can be found [here](https://ardupilot.org/dev/docs/building-setup-l
 The only difference is that is recommend to check out the ArduSub branch
 
 ```Bash
-$ git clone https://github.com/ArduPilot/ardupilot.git -b Sub-4.1 --recurse
+$ git clone https://github.com/ArduPilot/ardupilot.git -b Sub-4.1 --recurse-submodules
 ```
 
 ```Bash
@@ -148,22 +148,33 @@ $ colcon build --symlink-install
 
 ## Run it with docker via CLI
 
-Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
-
 Create docker network:
 
 ```Bash
 $ sudo docker network create ros_net
 ```
 
-Run Ignition simulation + ardupilot SITL:
+### Run Ignition simulation + ardupilot SITL:
 
+If you a NVIDIA GPU:
 ```Bash
 $ xhost +local:root
 $ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
-Run bluerov software:
+If you have an AMD GPU:
+```Bash
+$ xhost +local:root
+$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+```
+
+If you have an Intel GPU:
+```Bash
+$ xhost +local:root
+$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+```
+
+### Run bluerov software:
 
 ```Bash
 $ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
