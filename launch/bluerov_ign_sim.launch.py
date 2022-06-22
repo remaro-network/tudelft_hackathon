@@ -46,7 +46,7 @@ def generate_launch_description():
             '-name', 'bluerov2',
             '-x', '10',
             '-y', '-6.0',
-            '-z', '-19.5',
+            '-z', '-20.5',
             '-Y', '-1.57']
     )
 
