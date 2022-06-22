@@ -52,6 +52,7 @@ Suggestions:
 * Change Ignition initial world camera position ([#13](https://github.com/remaro-network/tudelft_hackathon/issues/13))
 * Add model for bluerov2 heavy kit version ([#14](https://github.com/remaro-network/tudelft_hackathon/issues/14))
 * More elaborated world
+* Improve launch files
 * Improve formatting
 * Improve documentation
 * Add tests
