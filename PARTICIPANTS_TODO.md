@@ -37,13 +37,13 @@ Read [this](https://github.com/remaro-network/tudelft_hackathon#installation) fi
 
 # Activities to be done during hackathon:
 
-#### Reproduce everything
+#### Run bluerov agent
 
-* Reproduce everything both in the real bluerov and in Ignition
+* Run the bluerov agent both in the real BlueROV2 and in Gazebo (Ignition)
+* Complete the random wall avoidance code and run it both in the real BlueROV2 and Gazebo (Ignition) (solution on [90e272a](https://github.com/remaro-network/tudelft_hackathon/blob/90e272a09d1053d0afcec1402f8cc63476f0c6cc/scripts/random_wall_avoidance.py))
 
 #### Improve the system
 Suggestions:
-* Random avoidance algorithm (solution on 6a6d8c2)
 * Better avoidance algorithm
 * Adjust velocity parameters and sonar "field-of-view"
 * Test sonar data with SLAM algorithm ([#4](https://github.com/remaro-network/tudelft_hackathon/issues/4))

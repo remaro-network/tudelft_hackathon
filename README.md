@@ -1,7 +1,7 @@
 # REMARO Summer School Delft 2022 - Underwater robotics hackathon
 
-The overall goal of this hackathon is to provide hands-on training for the Early Stage Researchers (ESRs) 
-of the REMARO network (but not limited to) on how to architect, program, simulate and implement basic 
+The overall goal of this hackathon is to provide hands-on training for the Early Stage Researchers (ESRs)
+of the REMARO network (but not limited to) on how to architect, program, simulate and implement basic
 underwater robot functionalities.
 
 More specifically, the goals for ESRs with background in:
@@ -9,16 +9,16 @@ More specifically, the goals for ESRs with background in:
 * **Robotics:** learn cutting-edge tools, and details on how to develop robot-specific system
 
 Thus, this training will address how to setup an underwater robot, such as the [BlueROV2](https://bluerobotics.com/store/rov/bluerov2/),
-to run with ROS2, and how to simulate it with Gazebo (Ignition). The idea is that participants 
-work with a simulation first and then test what is developed in a real BlueROV2, with this they 
+to run with ROS2, and how to simulate it with Gazebo (Ignition). The idea is that participants
+work with a simulation first and then test what is developed in a real BlueROV2, with this they
 can begin to understand the challenges and differences of deploying a robot in simulation and in the real world.
 
-The use case selected for this training is “wall avoidance”. Basically, the goal is for the robot 
-to navigate an environment and not crash into walls using only sonar data. An initial code for a random 
-avoidance mission is provided with missing parts, and the idea is for participants to complete the 
+The use case selected for this training is “wall avoidance”. Basically, the goal is for the robot
+to navigate an environment and not crash into walls using only sonar data. An initial code for a random
+avoidance mission is provided with missing parts, and the idea is for participants to complete the
 code and work to develop better missions through training or improve the system in general.
 
-More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md) 
+More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md)
 
 You can check the intended behavior on the video:
 
@@ -33,7 +33,7 @@ You can find a system architecture of the system developed here (**ADD ARCHITECT
 - [Bluerov setup](https://github.com/remaro-network/tudelft_hackathon#bluerov-setup)
 - [Install prerequisites to run with docker](https://github.com/remaro-network/tudelft_hackathon#install-prerequisites)
 - [Install locally](https://github.com/remaro-network/tudelft_hackathon#install-locally)
-- [Run with docker](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker)
+- [Run it with docker via CLI](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker-via-cli)
 - [Run with docker with VSCode ](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker)
 - [Run locally](https://github.com/remaro-network/tudelft_hackathon#run-it-locally)
 - [Explanation](https://github.com/remaro-network/tudelft_hackathon#explanation)
@@ -204,13 +204,9 @@ Check instructions [here](https://github.com/remaro-network/tudelft_hackathon/bl
 ## Run it locally
 
 ### Simulation
-ArduSub SITL:
-```Bash
-$ sim_vehicle.py -L RATBeach -v ArduSub --model=JSON --out=udp:0.0.0.0:14550 --console
-```
 
 ```Bash
-$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true
+$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=true
 ```
 
 ### Bluerov2
@@ -286,7 +282,63 @@ For this hackathon, we setup two different nodes with simple behaviors:
 
 The [bluerov_agent](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/bluerov_agent.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then go around in a square path once. For this, the agent uses the topics & services listed in the mavros section.
 
-The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then starts moving forward. The agent subscribes to the sonar topic and every time it receives sonar readings it checks if there is an obstacle in its front, e.g. 180°, closer than a certain threshold, e.g. 1m, and in case there is it rotates randomly until there are no more obstacle. (This node should be completed during the hackathon, a solution can be found in commit 72d668c). For this, the agent uses the topics & services listed in the mavros section, and the `/scan` topic described in the ping360 driver section.
+Let's break the code and understand what's going on below the surface.
+
+The main function:
+```Python
+if __name__ == '__main__':
+    rclpy.init(args=sys.argv)
+
+    ardusub = BlueROVArduSubWrapper("ardusub_node")
+
+    thread = threading.Thread(target=rclpy.spin, args=(ardusub, ), daemon=True)
+    thread.start()
+
+    mission(ardusub)
+```
+First the `rclpy` library is initialized. Then the ardusub node is created using the `BlueROVArduSubWrapper` class defined in the `mavros_wrapper` package. Following, a new thread is created to spin the ardusub node in parallel, this is necessary because we are going to use some sleep functions in the main thread later and we want the ardusub node to keep spinning despite of that. Lastly, the `mission` function is called, which is where the mission of the robot is defined.
+
+Now let's take a look in the `mission` function
+```Python
+def mission(ardusub):
+
+    service_timer = ardusub.create_rate(2)
+    while ardusub.status.mode != "MANUAL":
+        ardusub.set_mode("MANUAL")
+        service_timer.sleep()
+
+    print("Manual mode selected")
+
+    while ardusub.status.armed == False:
+        ardusub.arm_motors(True)
+        service_timer.sleep()
+
+    print("Thrusters armed")
+
+    print("Initializing mission")
+
+    timer = ardusub.create_rate(0.5) # Hz
+
+    ardusub.toogle_rc_override(True)
+    ardusub.set_rc_override_channels(forward=0.5)
+    timer.sleep()
+    ardusub.set_rc_override_channels(lateral=0.5)
+    timer.sleep()
+    ardusub.set_rc_override_channels(forward=-0.5)
+    timer.sleep()
+    ardusub.set_rc_override_channels(lateral=-0.5)
+    timer.sleep()
+    ardusub.set_rc_override_channels(lateral=0)
+    ardusub.toogle_rc_override(False)
+
+    print("Mission completed")
+```
+A `service_timer` timer is created with 2Hz rate. Then we have a while loop that keeps trying to change the flight mode to `MANUAL` until the flight mode is set to `MANUAL`, note that the `ardusub.set_mode("MANUAL")` method from the mavros_wrapper explained earlier is used for this, and that the `service_timer` is used to make the loop wait for 0.5 seconds before repeating. Following, we have a similar loop to arm the motors.
+
+After that, we create a new timer with 0.5Hz rate. The `ardusub.toogle_rc_override(True)` method is called to make the ardusub node start publishing messages in the `/mavros/rc/override` topic. Then, we use the method `ardusub.set_rc_override_channels(forward=0.5)` to make the robot move forward with half of its thrust, this is achieved internally by the ardusub node by publishing the appropriate message in the `/mavros/rc/override` topic. Following, the program sleeps for 2 seconds and then we make the robot move again to other directions, in order to go "around" a square. And that is it.
+
+
+The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then starts moving forward. The agent subscribes to the sonar topic and every time it receives sonar readings it checks if there is an obstacle in its front, e.g. 180°, closer than a certain threshold, e.g. 1m, and in case there is it rotates randomly until there are no more obstacle. (This node should be completed during the hackathon, a solution can be found in [90e272a](https://github.com/remaro-network/tudelft_hackathon/blob/90e272a09d1053d0afcec1402f8cc63476f0c6cc/scripts/random_wall_avoidance.py)). For this, the agent uses the topics & services listed in the mavros section, and the `/scan` topic described in the ping360 driver section.
 
 ### Simulated BlueROV2
 
@@ -317,6 +369,10 @@ Note that the topic where the lidar data is published has the same name (`/scan`
 **MAVROS:** The only difference is that for the simulation we need to use a different `fcu_url`. In this case, `udp://:14551@:14555`.
 
 **Agent:** Since all the interfaces are the same, the agent nodes are the same for both simulation and the real robot.
+
+## Exercises
+
+Check [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md#activities-to-be-done-during-hackathon). The main task is to complete the random wall avoidance algorithm.
 
 ## Additional info
 
