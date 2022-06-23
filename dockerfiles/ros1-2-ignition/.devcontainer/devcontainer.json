@@ -6,13 +6,15 @@
 			"WORKSPACE": "${containerWorkspaceFolder}"
 		}
 	},
-	"remoteUser": "ros",
+	"remoteUser": "docker",
 	"runArgs": [
 		"--network=host",
 		"--cap-add=SYS_PTRACE",
 		"--security-opt=seccomp:unconfined",
 		"--security-opt=apparmor:unconfined",
-		"--volume=/tmp/.X11-unix:/tmp/.X11-unix"
+		"--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+		"--gpus",
+		"all",
 	],
 	"containerEnv": { "DISPLAY": "${localEnv:DISPLAY}" },
 	// Set *default* container specific settings.json values on container create.
@@ -28,7 +30,6 @@
 		"dotjoshjohnson.xml",
 		"zachflower.uncrustify",
 		"ms-azuretools.vscode-docker",
-		"ms-iot.vscode-ros",
 		"ms-python.python",
 		"ms-vscode.cpptools",
 		"redhat.vscode-yaml",

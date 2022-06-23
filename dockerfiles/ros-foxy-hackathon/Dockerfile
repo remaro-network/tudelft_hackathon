@@ -26,7 +26,7 @@ RUN [ "/bin/bash","-c","source /opt/ros/foxy/setup.bash \
             && rosdep install --from-paths src --ignore-src -r -y \
             && rm -rf /var/lib/apt/lists/"]
 
-RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 1' \
+RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 2' \
             && source /opt/ros/foxy/setup.bash \
             && colcon build --symlink-install"]
 

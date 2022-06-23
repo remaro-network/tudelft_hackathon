@@ -5,7 +5,6 @@ from rclpy.node import Node
 import threading
 
 from mavros_wrapper.ardusub_wrapper import *
-from mavros_wrapper.mavros_wrapper import *
 
 def mission(ardusub):
 

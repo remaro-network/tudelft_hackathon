@@ -1,4 +1,4 @@
-FROM rezenders/ignition:foxy-nvidia-ardusub
+FROM rezenders/ignition:foxy-ardusub
 
 USER root
 RUN apt update && apt install -y --no-install-recommends \
@@ -29,22 +29,21 @@ RUN [ "/bin/bash","-c","source /ign_ws/install/setup.bash \
 ENV IGN_GAZEBO_SYSTEM_PLUGIN_PATH=/home/docker/ardupilot_gazebo/build:${IGN_GAZEBO_SYSTEM_PLUGIN_PATH}
 ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/ardupilot_gazebo/models:/home/docker/ardupilot_gazebo/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
-WORKDIR /home/docker/
-RUN git clone https://github.com/Rezenders/bluerov2_ignition.git
-ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/bluerov2_ignition/models:/home/docker/bluerov2_ignition/worlds:${IGN_GAZEBO_RESOURCE_PATH}
-
-WORKDIR /home/docker/
-RUN git clone https://github.com/remaro-network/remaro_worlds.git -b ign-garden
-ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/remaro_worlds/models:/home/docker/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
-
 RUN mkdir -p /home/docker/tudelft_hackathon_ws/src
 
-WORKDIR /home/docker/tudelft_hackathon_ws/src
-RUN git clone https://github.com/remaro-network/tudelft_hackathon.git
-
 WORKDIR /home/docker/tudelft_hackathon_ws/
+RUN wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
+RUN vcs import src < hackathon.rosinstall --recursive
+
 
 USER root
+
+WORKDIR /home/docker/tudelft_hackathon_ws/src/mavros/mavros/scripts
+RUN [ "/bin/bash","-c","apt update \
+            && ./install_geographiclib_datasets.sh \
+            && rm -rf /var/lib/apt/lists/"]
+
+WORKDIR /home/docker/tudelft_hackathon_ws/
 RUN [ "/bin/bash","-c","source /opt/ros/foxy/setup.bash \
             && apt update && rosdep update \
             && rosdep install --from-paths src --ignore-src -r -y \
@@ -54,6 +53,9 @@ USER docker
 RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 1' \
             && source /opt/ros/foxy/setup.bash \
             && colcon build --symlink-install"]
+
+ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/tudelft_hackathon_ws/src/bluerov2_ignition/models:/home/docker/bluerov2_ignition/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+ENV IGN_GAZEBO_RESOURCE_PATH=/home/docker/tudelft_hackathon_ws/src/remaro_worlds/models:/home/docker/tudelft_hackathon_ws/src/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 
 WORKDIR /home/docker/tudelft_hackathon_ws/
 

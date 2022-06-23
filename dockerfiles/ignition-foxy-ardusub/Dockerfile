@@ -1,4 +1,4 @@
-FROM rezenders/ignition:foxy-nvidia
+FROM rezenders/ignition:foxy
 
 ENV DEBIAN_FRONTEND noninteractive
 

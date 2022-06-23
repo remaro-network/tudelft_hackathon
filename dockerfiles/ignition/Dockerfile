@@ -29,11 +29,10 @@ RUN apt update && apt install -y --no-install-recommends\
   $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/ignition\|sdf/d' | tr '\n' ' ') \
 	&& rm -rf /var/lib/apt/lists/
 
-WORKDIR /ign_ws/src/ign-gazebo
-RUN git checkout d31619609c2d2f967bf66fae6ec4c0191b79488b
-
 WORKDIR /ign_ws/
-RUN export MAKEFLAGS="-j 2" && colcon build --cmake-args -DBUILD_TESTING=OFF --merge-install --executor sequential
+
+RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 2' \
+            && colcon build --cmake-args -DBUILD_TESTING=OFF --merge-install --executor sequential"]
 
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
