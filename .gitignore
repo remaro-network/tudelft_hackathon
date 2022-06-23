@@ -1,3 +1,8 @@
+# ardusub sitl logs
+*.tlog
+*.tlog.raw
+eeprom.bin
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
