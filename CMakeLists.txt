@@ -9,6 +9,7 @@ find_package(mavros_msgs REQUIRED)
 install(PROGRAMS
   scripts/bluerov_agent.py
   scripts/random_wall_avoidance.py
+  scripts/potential_avoidance.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
