@@ -13,17 +13,16 @@ def laser_scan_cb(msg, ardusub):
     min_distance = 1.25
     yaw_speed = 0.3
     forward_speed = 0.12
-    allGreater = True
+
+    # TODO: Do something with the sonar msg in order to make the robot not
+    # crash into the walls
+    #
+    # CHEAT:
+    # LaserScan msg definition can be found here: https://docs.ros2.org/latest/api/sensor_msgs/msg/LaserScan.html
+    # Before checking the solution provided, check this example:
+    # https://github.com/gazebosim/docs/blob/master/citadel/sensors.md#avoid-the-wall
     for scan in msg.ranges:
-        if scan < min_distance:
-            allGreater = False
-            _yaw_speed = (-1)**random.choice([1, 2])*yaw_speed
-            ardusub.set_rc_override_channels(
-                forward=-forward_speed/4,
-                yaw=_yaw_speed)
-            break
-    if allGreater:
-        ardusub.set_rc_override_channels(throttle=0, pitch=0, forward=forward_speed)
+        pass
 
 
 if __name__ == '__main__':
@@ -37,24 +36,21 @@ if __name__ == '__main__':
     thread = threading.Thread(target=rclpy.spin, args=(ardusub, ), daemon=True)
     thread.start()
 
-    service_timer = ardusub.create_rate(2)
-    while ardusub.status.mode != "MANUAL":
-        ardusub.set_mode("MANUAL")
-        service_timer.sleep()
+    # TODO: Set flight mode to MANUAL, STABILIZE or DEPTH HOLD
 
     print("Manual mode selected")
 
-    while ardusub.status.armed == False:
-        ardusub.arm_motors(True)
-        service_timer.sleep()
+    # TODO: Arm motors
 
     print("Thrusters armed")
 
     print("Initializing mission")
 
-    ardusub.toogle_rc_override(True)
-    ardusub.set_rc_override_channels(throttle=0.0, pitch=0.0, forward=0.12)
+    # TODO: start publishing on /mavros/rc/override
 
+    # TODO: start moving forward
+
+    # Sonar subscriber
     laser_subscriber = ardusub.create_subscription(
         LaserScan, '/scan', (lambda msg: laser_scan_cb(msg, ardusub)), 10)
 
