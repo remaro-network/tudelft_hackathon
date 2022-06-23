@@ -372,7 +372,7 @@ Note that the topic where the lidar data is published has the same name (`/scan`
 
 ## Exercises
 
-Check [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md#activities-to-be-done-during-hackathon). The main task is to complete the random wall avoidance algorithm.
+Check [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md#activities-to-be-done-during-hackathon). The main task is to complete the [random wall avoidance algorithm](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py).
 
 ## Additional info
 

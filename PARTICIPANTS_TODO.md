@@ -40,7 +40,7 @@ Read [this](https://github.com/remaro-network/tudelft_hackathon#installation) fi
 #### Run bluerov agent
 
 * Run the bluerov agent both in the real BlueROV2 and in Gazebo (Ignition)
-* Complete the random wall avoidance code and run it both in the real BlueROV2 and Gazebo (Ignition) (solution on [90e272a](https://github.com/remaro-network/tudelft_hackathon/blob/90e272a09d1053d0afcec1402f8cc63476f0c6cc/scripts/random_wall_avoidance.py))
+* Complete the [random wall avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) code and run it both in the real BlueROV2 and Gazebo (Ignition) (solution on [90e272a](https://github.com/remaro-network/tudelft_hackathon/blob/90e272a09d1053d0afcec1402f8cc63476f0c6cc/scripts/random_wall_avoidance.py))
 
 #### Improve the system
 Suggestions:
