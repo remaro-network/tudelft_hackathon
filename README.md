@@ -204,6 +204,18 @@ Check instructions [here](https://github.com/remaro-network/tudelft_hackathon/bl
 ## Run it locally
 
 ### Simulation
+Before running anything you need to source the workspace. With this command:
+
+```Bash
+source ~/tudelft_hackathon_ws/install/setup.bash
+```
+
+Or you can add that to the ~/.bashrc file to prevent needing to source everytime.
+
+```Bash
+echo "source ~/tudelft_hackathon_ws/install/setup.bash" >> ~/.bashrc 
+```
+Don't forget to re-open your terminal after altering the `~/.bashrc` file.
 
 ```Bash
 $ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=true
