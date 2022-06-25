@@ -125,6 +125,8 @@ If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs
 
 Install ardupilot_gazebo plugin following the instructions in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
 
+**Disclaimer:** You can stop following the instructions after the .bashrc part. Running ign gazebo with the iris_arducopter_runaway won't work, and it is not necessary for this training.
+
 #### Install hackathon workspace
 
 Create new workspace:
