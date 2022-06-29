@@ -15,12 +15,11 @@ can begin to understand the challenges and differences of deploying a robot in s
 
 The use case selected for this training is “wall avoidance”. Basically, the goal is for the robot
 to navigate an environment and not crash into walls using only sonar data. An initial code for a random
-avoidance mission is provided with missing parts, and the idea is for participants to complete the
-code and work to develop better missions through training or improve the system in general.
+avoidance mission is provided, and the idea is that participants work to develop better missions during this training and improve the system in general.
 
 More details on instructions for participants can be found in the [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md)
 
-You can check the intended behavior on the video:
+You can check the random wall avoidance behavior on the video:
 
 [![Youtube video](https://user-images.githubusercontent.com/20564040/175087210-6706607d-c2db-4b25-888e-1973e3d093fb.png)](https://www.youtube.com/watch?v=Zv-int_BIJw)
 
@@ -29,15 +28,17 @@ You can find some slides with useful information here (**ADD SLIDES LINK**)
 You can find a system architecture of the system developed here (**ADD ARCHITECTURE LINK**)
 
 ## Summary
-- [Computer setup](https://github.com/remaro-network/tudelft_hackathon#computer-setup)
+- [Computer setup](https://github.com/remaro-network/tudelft_hackathon#setup)
 - [Bluerov setup](https://github.com/remaro-network/tudelft_hackathon#bluerov-setup)
-- [Install prerequisites to run with docker](https://github.com/remaro-network/tudelft_hackathon#install-prerequisites)
-- [Install locally](https://github.com/remaro-network/tudelft_hackathon#install-locally)
+* [Installation](https://github.com/remaro-network/tudelft_hackathon#installation)
+  - [Install prerequisites to run with docker](https://github.com/remaro-network/tudelft_hackathon#install-prerequisites-to-run-with-docker)
+  - [Install locally](https://github.com/remaro-network/tudelft_hackathon#install-locally)
 - [Run it with docker via CLI](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker-via-cli)
-- [Run with docker with VSCode ](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker)
+- [Run with docker with VSCode ](https://github.com/remaro-network/tudelft_hackathon#run-it-with-docker-with-vscode)
 - [Run locally](https://github.com/remaro-network/tudelft_hackathon#run-it-locally)
 - [Explanation](https://github.com/remaro-network/tudelft_hackathon#explanation)
-- [Additional information](https://github.com/remaro-network/tudelft_hackathon#additional-information)
+- [Exercises](https://github.com/remaro-network/tudelft_hackathon#exercises)
+- [Additional information](https://github.com/remaro-network/tudelft_hackathon#additional-info)
 - [Acknowledgments](https://github.com/remaro-network/tudelft_hackathon#acknowledgments)
 
 ## Setup
@@ -76,7 +77,7 @@ In those cases go for the [local installation](https://github.com/remaro-network
 - Install docker on your machine. You can find instructions [here](https://docs.docker.com/engine/install/ubuntu/)
 - Allow non-root users to manage docker. Instructions [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 - Install VSCode. Instructions [here](https://code.visualstudio.com/download)
-- Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
+- Install [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)(only needed if you have a nvidia GPU)
 
 ### Configure computer to connect with the BlueROV2
 Follow [Bluerobotics instructions](https://bluerobotics.com/learn/bluerov2-software-setup/#software-introduction)
@@ -122,6 +123,12 @@ $ . ~/.profile
 If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs/building-setup-mac.html)
 
 #### Install ardusub_plugin
+
+**IMPORTANT:** Clone into the ignition-garden instead of fortress:
+
+```Bash
+$ git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
+```
 
 Install ardupilot_gazebo plugin following the instructions in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
 
@@ -338,7 +345,7 @@ A `service_timer` timer is created with 2Hz rate. Then we have a while loop that
 After that, we create a new timer with 0.5Hz rate. The `ardusub.toogle_rc_override(True)` method is called to make the ardusub node start publishing messages in the `/mavros/rc/override` topic. Then, we use the method `ardusub.set_rc_override_channels(forward=0.5)` to make the robot move forward with half of its thrust, this is achieved internally by the ardusub node by publishing the appropriate message in the `/mavros/rc/override` topic. Following, the program sleeps for 2 seconds and then we make the robot move again to other directions, in order to go "around" a square. And that is it.
 
 
-The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) has the following behavior. The robot set its flight mode to `MANUAL`, then arms the thrusters, then starts moving forward. The agent subscribes to the sonar topic and every time it receives sonar readings it checks if there is an obstacle in its front, e.g. 180°, closer than a certain threshold, e.g. 1m, and in case there is it rotates randomly until there are no more obstacle. (This node should be completed during the hackathon, a solution can be found in [90e272a](https://github.com/remaro-network/tudelft_hackathon/blob/90e272a09d1053d0afcec1402f8cc63476f0c6cc/scripts/random_wall_avoidance.py)). For this, the agent uses the topics & services listed in the mavros section, and the `/scan` topic described in the ping360 driver section.
+The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py) has the following behavior. The robot set its flight mode to `ALT HOLD`, then arms the thrusters, then starts moving forward. The agent subscribes to the sonar topic and every time it receives sonar readings it checks if there is an obstacle in its front, e.g. 180°, closer than a certain threshold, e.g. 1.25m, and in case there is it rotates randomly until there are no more obstacle. For this, the agent uses the topics & services listed in the mavros section, and the `/scan` topic described in the ping360 driver section.
 
 ### Simulated BlueROV2
 
@@ -372,7 +379,9 @@ Note that the topic where the lidar data is published has the same name (`/scan`
 
 ## Exercises
 
-Check [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md#activities-to-be-done-during-hackathon). The main task is to complete the [random wall avoidance algorithm](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/scripts/random_wall_avoidance.py).
+The main exercise of this training is to implement an avoidance algorithm based on potential fields, you can find more info on the issue [#36](https://github.com/remaro-network/tudelft_hackathon/issues/36).
+
+Check [PARTICIPANTS_TODO](https://github.com/remaro-network/tudelft_hackathon/blob/ros2/PARTICIPANTS_TODO.md#activities-to-be-done-during-hackathon) for extra info.
 
 ## Additional info
 
