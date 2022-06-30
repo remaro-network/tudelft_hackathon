@@ -93,15 +93,15 @@ For this, you can follow the instructions in the [ignition documentation](https:
 Instead of using the garden collection
 
 ```Bash
-$ wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-garden.yaml
-$ vcs import < collection-garden.yaml
+ wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-garden.yaml ;
+ vcs import < collection-garden.yaml
 ```
 
 Use this one:
 
 ```Bash
-$ wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos
-$ vcs import < garden.repos
+ wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos ;
+ vcs import < garden.repos
 ```
 
 #### Install ardusub
@@ -111,13 +111,13 @@ Instructions can be found [here](https://ardupilot.org/dev/docs/building-setup-l
 The only difference is that is recommend to check out the ArduSub branch
 
 ```Bash
-$ git clone https://github.com/ArduPilot/ardupilot.git -b Sub-4.1 --recurse-submodules
+ git clone https://github.com/ArduPilot/ardupilot.git -b Sub-4.1 --recurse-submodules
 ```
 
 ```Bash
-$ cd ardupilot
-$ Tools/environment_install/install-prereqs-ubuntu.sh -y
-$ . ~/.profile
+ cd ardupilot ;
+ Tools/environment_install/install-prereqs-ubuntu.sh -y ;
+ . ~/.profile
 ```
 
 If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs/building-setup-mac.html)
@@ -127,7 +127,7 @@ If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs
 **IMPORTANT:** Clone into the ignition-garden instead of fortress:
 
 ```Bash
-$ git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
+ git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
 ```
 
 Install ardupilot_gazebo plugin following the instructions in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
@@ -138,33 +138,33 @@ Install ardupilot_gazebo plugin following the instructions in the [repo](https:/
 
 Create new workspace:
 ```Bash
-$ mkdir -p ~/tudelft_hackathon_ws/src
-$ cd ~/tudelft_hackathon_ws
+ mkdir -p ~/tudelft_hackathon_ws/src ;
+ cd ~/tudelft_hackathon_ws
 ```
 
 Clone repos:
 ```Bash
-$ wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
-$ vcs import src < hackathon.rosinstall --recursive
+ wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall ;
+ vcs import src < hackathon.rosinstall --recursive
 ```
 
 Add this to your .bashrc
 ```Bash
-export IGN_GAZEBO_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds
+export IGN_GAZEBO_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds 
 
 export IGN_GAZEBO_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
 ```
 
 Install deps:
 ```Bash
-$ source /opt/ros/foxy/setup.bash
-$ rosdep install --from-paths src --ignore-src -r -y
+ source /opt/ros/foxy/setup.bash ;
+ rosdep install --from-paths src --ignore-src -r -y
 ```
 
 Build project:
 ```Bash
-$ cd ~/tudelft_hackathon_ws/
-$ colcon build --symlink-install
+ cd ~/tudelft_hackathon_ws/ ;
+ colcon build --symlink-install
 ```
 
 ## Run it with docker via CLI
@@ -172,33 +172,33 @@ $ colcon build --symlink-install
 Create docker network:
 
 ```Bash
-$ sudo docker network create ros_net
+ sudo docker network create ros_net
 ```
 
 ### Run Ignition simulation + ardupilot SITL:
 
 If you a NVIDIA GPU:
 ```Bash
-$ xhost +local:root
-$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ xhost +local:root ;
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an AMD GPU:
 ```Bash
-$ xhost +local:root
-$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ xhost +local:root ;
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an Intel GPU:
 ```Bash
-$ xhost +local:root
-$ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ xhost +local:root ;
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 ### Run bluerov software:
 
 ```Bash
-$ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
+ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
 ### Development with docker via cli
@@ -227,13 +227,13 @@ echo "source ~/tudelft_hackathon_ws/install/setup.bash" >> ~/.bashrc
 Don't forget to re-open your terminal after altering the `~/.bashrc` file.
 
 ```Bash
-$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=true
+ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=true
 ```
 
 ### Bluerov2
 
 ```Bash
-$ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
+ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=false
 ```
 
 ## Explanation
