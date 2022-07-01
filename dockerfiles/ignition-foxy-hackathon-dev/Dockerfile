@@ -1,4 +1,4 @@
-FROM rezenders/ignition:hackathon
+FROM rezenders/ignition:hackathon-nvidia
 
 COPY . /home/docker/tudelft_hackathon_ws/src/tudelft_hackathon/
 RUN [ "/bin/bash","-c","export MAKEFLAGS='-j 1' \

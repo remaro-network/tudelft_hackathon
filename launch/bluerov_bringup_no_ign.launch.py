@@ -65,7 +65,7 @@ def generate_launch_description():
 
     agent_node = Node(
         package='tudelft_hackathon',
-        executable='bluerov_agent.py',
+        executable='potential_avoidance.py',
         output='screen'
     )
 

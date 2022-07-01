@@ -10,9 +10,9 @@ from sensor_msgs.msg import LaserScan
 from mavros_wrapper.ardusub_wrapper import *
 
 def laser_scan_cb(msg, ardusub):
-    min_distance = 1.25
+    min_distance = 1.5
     yaw_speed = 0.3
-    forward_speed = 0.12
+    forward_speed = 0.15
     allGreater = True
     for scan in msg.ranges:
         if scan < min_distance:
@@ -23,7 +23,7 @@ def laser_scan_cb(msg, ardusub):
                 yaw=_yaw_speed)
             break
     if allGreater:
-        ardusub.set_rc_override_channels(throttle=0, pitch=0, forward=forward_speed)
+        ardusub.set_rc_override_channels(forward=forward_speed)
 
 
 if __name__ == '__main__':
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     print("Initializing mission")
 
     ardusub.toogle_rc_override(True)
-    ardusub.set_rc_override_channels(throttle=0.0, pitch=0.0, forward=0.12)
+    ardusub.set_rc_override_channels(forward=0.35)
 
     laser_subscriber = ardusub.create_subscription(
         LaserScan, '/scan', (lambda msg: laser_scan_cb(msg, ardusub)), 10)
