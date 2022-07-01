@@ -3,6 +3,7 @@ import sys
 import rclpy
 import random
 import threading
+import numpy as np
 
 from rclpy.node import Node
 
@@ -10,7 +11,7 @@ from sensor_msgs.msg import LaserScan
 from mavros_wrapper.ardusub_wrapper import *
 
 def laser_scan_cb(msg, ardusub):
-    forward_speed = 1.0 # Maximum forward velocity
+    forward_speed = 0.3 # Maximum forward velocity
 
     # TODO: Do something with the sonar msg in order to make the robot not
     # crash into the walls
@@ -21,9 +22,17 @@ def laser_scan_cb(msg, ardusub):
     # https://github.com/gazebosim/docs/blob/master/citadel/sensors.md#avoid-the-wall
 
     # Compute the potential vector
+    sonar_data = msg
     angles = np.linspace(sonar_data.angle_min, sonar_data.angle_max, num=len(sonar_data.ranges))
     potentials_x = np.multiply(1/np.asarray(sonar_data.ranges)**2, np.cos(angles))
     sum_potentials_x = np.sum(potentials_x)
+
+    print("angle_min: ", sonar_data.angle_min)
+    print("angle_max: ", sonar_data.angle_max)
+    print("Angles: ", angles)
+
+    sum_potentials_angles = np.sum(np.cos(angles))
+    print("Sum of Cosine of Angles: ", sum_potentials_angles)
 
     potentials_y = np.multiply(1/np.asarray(sonar_data.ranges)**2, np.sin(angles))
     sum_potentials_y = np.sum(potentials_y)
@@ -31,8 +40,9 @@ def laser_scan_cb(msg, ardusub):
     p = (sum_potentials_x,sum_potentials_y)
 
     # set some gains
-    k_p = .3
-    k_phi = 10
+    k_p = 1/sum_potentials_angles
+    # k_p = 1/sum_potentials_x
+    k_phi = -0.5
 
     # Function for computing the new velocity vector
     potential_velocity(forward_speed,(p),k_p,k_phi)
@@ -59,6 +69,8 @@ def potential_velocity(max_vel,p,K_p,K_phi):
     # The previous values should be between -1 and 1. 
     ardusub.toogle_rc_override(True) # start overriding RC
     ardusub.set_rc_override_channels(forward=forward_vel, yaw = yaw_vel) # set values to override
+    print("forward_vel : ",forward_vel)
+    print("yaw_vel : ",yaw_vel)
 
 if __name__ == '__main__':
     print("Starting wall avoidance. Let's swim!")
@@ -73,8 +85,8 @@ if __name__ == '__main__':
 
     # TODO: Set flight mode to MANUAL, STABILIZE or DEPTH HOLD
     service_timer = ardusub.create_rate(2)
-    while ardusub.status.mode != "MANUAL":
-            ardusub.set_mode("MANUAL")
+    while ardusub.status.mode != "ALT_HOLD":
+            ardusub.set_mode("ALT_HOLD")
             service_timer.sleep()
     print("Manual mode selected")
 
@@ -89,7 +101,7 @@ if __name__ == '__main__':
 
     # TODO: start publishing on /mavros/rc/override
     ardusub.toogle_rc_override(True)
-    ardusub.set_rc_override_channels(throttle=0.0, pitch=0.0, forward=0.12)
+    ardusub.set_rc_override_channels(throttle=0.0, pitch=0.0, forward=0.01)
     # TODO: start moving forward
 
     # Sonar subscriber
