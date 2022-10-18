@@ -23,10 +23,6 @@ You can check the random wall avoidance behavior on the video:
 
 [![Youtube video](https://user-images.githubusercontent.com/20564040/175087210-6706607d-c2db-4b25-888e-1973e3d093fb.png)](https://www.youtube.com/watch?v=Zv-int_BIJw)
 
-You can find some slides with useful information here (**ADD SLIDES LINK**)
-
-You can find a system architecture of the system developed here (**ADD ARCHITECTURE LINK**)
-
 ## Summary
 - [Computer setup](https://github.com/remaro-network/tudelft_hackathon#setup)
 - [Bluerov setup](https://github.com/remaro-network/tudelft_hackathon#bluerov-setup)
@@ -44,13 +40,13 @@ You can find a system architecture of the system developed here (**ADD ARCHITECT
 ## Setup
 
 Tested with:
-- Ubuntu 20.04
-- ROS2 foxy
-- Ignition garden (on [this](https://github.com/gazebosim/gz-sim/pull/1402) patch)  
-- ArduPilot (Sub-4.1)(14e6dcdc2fa85c1d6f8d298591c0f103de56b4cd)
-- ardupilot_gazebo plugin with [this version](https://github.com/ArduPilot/ardupilot_gazebo/tree/aaffdc02580980a17f7717e32e520747051811f3)
+- Ubuntu 22.04
+- [ROS2 Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+- [Gazebo (Ignition) Garden](https://gazebosim.org/docs/garden/install_ubuntu)
+- [ArduPilot (Sub-4.1)](https://github.com/ArduPilot/ardupilot/tree/f2af3c7ed2907be914c41d8512654a77498d3870)
+- [ardupilot_gazebo plugin](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
 - [mavros2](https://github.com/mavlink/mavros)
-- Ignition garden version of [remaro_world](https://github.com/remaro-network/remaro_worlds/tree/ign-garden)
+- [remaro_world](https://github.com/remaro-network/remaro_worlds/tree/ign-garden)
 - [bluerov2_ignition](https://github.com/Rezenders/bluerov2_ignition)
 
 ## Bluerov Setup
@@ -67,7 +63,7 @@ Run everything with docker (read disclaimer bellow):
 
 **Disclaimer**
 Running docker images with graphical user interface is a little bit trick and might not work in all systems.
-We tested in a system with ubuntu 20.04 and with a NVIDIA gpu.
+We tested in a system with ubuntu 22.04 and with a NVIDIA gpu.
 It might not work on systems with AMD gpus, and on MAC.
 We are going to try to fix this problem until the hackathon, but it is not guaranteed.
 In those cases go for the [local installation](https://github.com/remaro-network/tudelft_hackathon#install-locally).
@@ -83,88 +79,121 @@ In those cases go for the [local installation](https://github.com/remaro-network
 Follow [Bluerobotics instructions](https://bluerobotics.com/learn/bluerov2-software-setup/#software-introduction)
 
 ### Install locally
-#### Install ignition
+#### Install Gazebo Garden
 
-It is necessary to build Ignition from source since we require this [patch](https://github.com/gazebosim/gz-sim/pull/1402), which is not included in any of the available releases yet.
+Follow the [official instructions](https://gazebosim.org/docs/garden/install_ubuntu) for installing Gazebo Garden.
 
-For this, you can follow the instructions in the [ignition documentation](https://gazebosim.org/docs/garden/install_ubuntu_src).
+#### Install ROS2 Humble
 
-**IMPORTANT**
-Instead of using the garden collection
-
-```Bash
- wget https://raw.githubusercontent.com/ignition-tooling/gazebodistro/master/collection-garden.yaml ;
- vcs import < collection-garden.yaml
-```
-
-Use this one:
-
-```Bash
- wget https://raw.githubusercontent.com/Rezenders/bluerov2_ignition/main/garden.repos ;
- vcs import < garden.repos
-```
+Follow the [official instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html) for installing ROS2 Humble.
 
 #### Install ardusub
 
 Instructions can be found [here](https://ardupilot.org/dev/docs/building-setup-linux.html#building-setup-linux)
 
-The only difference is that is recommend to check out the ArduSub branch
+**Disclaimer:**
+Problems may occur with different combinations of ArduPilot and MavROS versions. This repo was tested with [ardupilot in commit c623ae8](https://github.com/ArduPilot/ardupilot/tree/c623ae8b82db4d7e195f4b757e2ae5d049f941e5) and [mavros 2.2.0](https://github.com/mavlink/mavros/tree/686bd833e7d6ea5542977178872762dfbec5ed89). Unfortunately, at least at the time of writing this README, the releases available in Ubuntu 22.04 do not match.
 
 ```Bash
- git clone https://github.com/ArduPilot/ardupilot.git -b Sub-4.1 --recurse-submodules
+  cd ~/
+  git clone https://github.com/ArduPilot/ardupilot.git --recurse-submodules
+  git checkout c623ae8
 ```
 
+Don't forget to install ardupilot prerequisites:
+
 ```Bash
- cd ardupilot ;
- Tools/environment_install/install-prereqs-ubuntu.sh -y ;
- . ~/.profile
+  cd ardupilot
+  Tools/environment_install/install-prereqs-ubuntu.sh -y
+  . ~/.profile
 ```
 
 If you want to use MAC, follow [this instruction](https://ardupilot.org/dev/docs/building-setup-mac.html)
 
-#### Install ardusub_plugin
-
-**IMPORTANT:** Clone into the ignition-garden instead of fortress:
+To test if the installation worked, run:
 
 ```Bash
- git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
+sim_vehicle.py -v ArduSub -L RATBeach --console --map
 ```
 
-Install ardupilot_gazebo plugin following the instructions in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
+Ardupilot SITL should open and a console plus a map should appear.
 
-**Disclaimer:** You can stop following the instructions after the .bashrc part. Running ign gazebo with the iris_arducopter_runaway won't work, and it is not necessary for this training.
+**Troubleshoot**
+If you have problems with the install-prereqs-ubuntu.sh script try to install the dependencies manually with the following commands.
+
+```Bash
+pip3 install --user -U future lxml pymavlink MAVProxy pexpect flake8 geocoder empy dronecan pygame intelhex
+```
+
+```Bash
+sudo apt-get --assume-yes install build-essential ccache g++ gawk git make wget python-is-python3 libtool libxml2-dev libxslt1-dev python3-dev python3-pip python3-setuptools python3-numpy python3-pyparsing python3-psutil xterm python3-matplotlib python3-serial python3-scipy python3-opencv libcsfml-dev libcsfml-audio2.5 libcsfml-dev libcsfml-graphics2.5 libcsfml-network2.5 libcsfml-system2.5 libcsfml-window2.5 libsfml-audio2.5 libsfml-dev libsfml-graphics2.5 libsfml-network2.5 libsfml-system2.5 libsfml-window2.5 python3-yaml libpython3-stdlib python3-wxgtk4.0 fonts-freefont-ttf libfreetype6-dev libpng16-16 libportmidi-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libtool-bin g++-arm-linux-gnueabihf lcov gcovr
+```
+
+#### Install ardusub_plugin
+
+**IMPORTANT:** Clone into the ignition-garden branch:
+
+Install dependencies:
+
+```Bash
+  sudo apt install rapidjson-dev libgz-sim7-dev
+```
+
+Clone and build repo:
+
+```Bash
+  cd ~/
+  git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
+  cd ardupilot_gazebo
+  mkdir build && cd build
+  cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  make -j4
+```
+
+Add required paths:
+
+Assuming that you have clone the repository in `$HOME/ardupilot_gazebo`:
+```bash
+  echo 'export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:${GZ_SIM_SYSTEM_PLUGIN_PATH}' >> ~/.bashrc
+  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$HOME/ardupilot_gazebo/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
+```
+
+Reload your terminal with source ~/.bashrc
+
+More info about the plugin can be found in the [repo](https://github.com/ArduPilot/ardupilot_gazebo/tree/ignition-garden)
 
 #### Install hackathon workspace
 
 Create new workspace:
 ```Bash
- mkdir -p ~/tudelft_hackathon_ws/src ;
- cd ~/tudelft_hackathon_ws
+  mkdir -p ~/tudelft_hackathon_ws/src
+  cd ~/tudelft_hackathon_ws
 ```
 
 Clone repos:
 ```Bash
- wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall ;
- vcs import src < hackathon.rosinstall --recursive
+  wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
+  vcs import src < hackathon.rosinstall --recursive
 ```
 
-Add this to your .bashrc
+Add required paths:
 ```Bash
-export IGN_GAZEBO_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds 
+  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 
-export IGN_GAZEBO_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${IGN_GAZEBO_RESOURCE_PATH}
+  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 ```
 
 Install deps:
 ```Bash
- source /opt/ros/foxy/setup.bash ;
- rosdep install --from-paths src --ignore-src -r -y
+  source /opt/ros/humble/setup.bash
+  cd ~/tudelft_hackathon_ws/
+  rosdep install --from-paths src --ignore-src -r -y
 ```
 
 Build project:
 ```Bash
- cd ~/tudelft_hackathon_ws/ ;
- colcon build --symlink-install
+  cd ~/tudelft_hackathon_ws/
+  colcon build --symlink-install
 ```
 
 ## Run it with docker via CLI
@@ -222,7 +251,7 @@ source ~/tudelft_hackathon_ws/install/setup.bash
 Or you can add that to the ~/.bashrc file to prevent needing to source everytime.
 
 ```Bash
-echo "source ~/tudelft_hackathon_ws/install/setup.bash" >> ~/.bashrc 
+echo "source ~/tudelft_hackathon_ws/install/setup.bash" >> ~/.bashrc
 ```
 Don't forget to re-open your terminal after altering the `~/.bashrc` file.
 
@@ -369,12 +398,12 @@ The [random_wall_avoidance](https://github.com/remaro-network/tudelft_hackathon/
 
 Via command line:
 ```
-ros2 run ros_ign_bridge parameter_bridge lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan -r /lidar:=/scan
+ros2 run ros_gz_bridge parameter_bridge lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan -r /lidar:=/scan
 ```
 
 With launch file:
 ```
-package='ros_ign_bridge',
+package='ros_gz_bridge',
     executable='parameter_bridge',
     arguments=['lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan'],
     remappings=[('/lidar','/scan')],
