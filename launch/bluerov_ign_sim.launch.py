@@ -26,19 +26,19 @@ def generate_launch_description():
         default_value='0.0.0.0:14550',
     )
 
-    pkg_ros_ign_gazebo = get_package_share_directory('ros_ign_gazebo')
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
-    ign_gazebo = IncludeLaunchDescription(
+    gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py')),
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
         launch_arguments={
-           'ign_args': '-r room_walls.world'
+           'gz_args': '-r room_walls.world'
         }.items(),
     )
 
     #TODO: Pass x, y, z, R, P and Y as parameter
     bluerov_spawn = Node(
-        package='ros_ign_gazebo',
+        package='ros_gz_sim',
         executable='create',
         arguments=[
             '-world', 'walls',
@@ -46,21 +46,21 @@ def generate_launch_description():
             '-name', 'bluerov2',
             '-x', '10',
             '-y', '-6.0',
-            '-z', '-20.5',
+            '-z', '-17.5',
             '-Y', '-1.57']
     )
 
     # Bridge
     bridge = Node(
-        package='ros_ign_bridge',
+        package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan'],
+        arguments=['lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan'],
         remappings=[('/lidar','/scan')],
         output='screen'
     )
 
     return LaunchDescription([
-        ign_gazebo,
+        gz_sim,
         bluerov_spawn,
         bridge,
         ardusub_arg,

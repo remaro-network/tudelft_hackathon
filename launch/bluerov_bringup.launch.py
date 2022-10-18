@@ -65,7 +65,7 @@ def generate_launch_description():
 
     agent_node = Node(
         package='tudelft_hackathon',
-        executable='potential_avoidance.py',
+        executable='random_wall_avoidance.py',
         output='screen'
     )
 
