@@ -6,15 +6,15 @@ repositories:
   mavros:
     type: git
     url: https://github.com/mavlink/mavros.git
-    version: ros2
+    version: 686bd83
   mavros_wrapper:
     type: git
     url: https://github.com/remaro-network/mavros_wrapper.git
     version: ros2
   ping360_sonar:
     type: git
-    url: https://github.com/Rezenders/ping360_sonar.git
-    version: ros2
+    url: git@github.com:CentraleNantesRobotics/ping360_sonar.git
+    version: 8fcd65d
   remaro_worlds:
     type: git
     url: https://github.com/remaro-network/remaro_worlds.git
@@ -23,3 +23,7 @@ repositories:
     type: git
     url: https://github.com/remaro-network/tudelft_hackathon.git
     version: ros2
+  ros_gz:
+    type: git
+    url: https://github.com/gazebosim/ros_gz.git
+    version: e2fe0da
