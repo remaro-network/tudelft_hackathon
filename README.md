@@ -97,6 +97,7 @@ Problems may occur with different combinations of ArduPilot and MavROS versions.
 ```Bash
   cd ~/
   git clone https://github.com/ArduPilot/ardupilot.git --recurse-submodules
+  cd ardupilot
   git checkout c623ae8
 ```
 
@@ -209,25 +210,25 @@ Create docker network:
 If you a NVIDIA GPU:
 ```Bash
  xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an AMD GPU:
 ```Bash
  xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon-non-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an Intel GPU:
 ```Bash
  xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon-non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon-non-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 ### Run bluerov software:
 
 ```Bash
- sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-foxy-hackathon ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
+ sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-hackathon-humble ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
 ### Development with docker via cli
