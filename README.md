@@ -132,8 +132,6 @@ sudo apt-get --assume-yes install build-essential ccache g++ gawk git make wget 
 
 #### Install ardusub_plugin
 
-**IMPORTANT:** Clone into the ignition-garden branch:
-
 Install dependencies:
 
 ```Bash
@@ -144,7 +142,7 @@ Clone and build repo:
 
 ```Bash
   cd ~/
-  git clone https://github.com/ArduPilot/ardupilot_gazebo -b ignition-garden
+  git clone https://github.com/ArduPilot/ardupilot_gazebo
   cd ardupilot_gazebo
   mkdir build && cd build
   cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
@@ -435,6 +433,10 @@ Password: raspberry
 ```Bash
 $ ssh pi@192.168.2.2
 ```
+
+## Related repository
+
+[SUAVE](https://github.com/kas-lab/suave#install-the-exemplar-locally): An Exemplar for Self-Adaptive Underwater Vehicles
 
 ## Acknowledgments
 This project has received funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 956200.
