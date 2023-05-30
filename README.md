@@ -1,3 +1,5 @@
+[![Docker Images](https://github.com/remaro-network/tudelft_hackathon/actions/workflows/container.yaml/badge.svg)](https://github.com/remaro-network/tudelft_hackathon/actions/workflows/container.yaml)
+
 # REMARO Summer School Delft 2022 - Underwater robotics hackathon
 
 The overall goal of this hackathon is to provide hands-on training for the Early Stage Researchers (ESRs)
@@ -110,11 +112,11 @@ Instructions can be found [here](https://ardupilot.org/dev/docs/building-setup-l
 Problems may occur with different combinations of ArduPilot and MavROS versions.
 
 ```Bash
-  cd ~/
-  git clone https://github.com/ArduPilot/ardupilot.git
-  cd ardupilot
-  git checkout 94ba4ec
-  git submodule update --init --recursive
+cd ~/
+git clone https://github.com/ArduPilot/ardupilot.git
+cd ardupilot
+git checkout 94ba4ec
+git submodule update --init --recursive
 ```
 
 Note that the script used to install prerequisites available for this
@@ -158,26 +160,26 @@ sudo apt-get --assume-yes install build-essential ccache g++ gawk git make wget 
 Install dependencies:
 
 ```Bash
-  sudo apt install rapidjson-dev libgz-sim7-dev
+sudo apt install rapidjson-dev libgz-sim7-dev
 ```
 
 Clone and build repo:
 
 ```Bash
-  cd ~/
-  git clone https://github.com/ArduPilot/ardupilot_gazebo
-  cd ardupilot_gazebo
-  mkdir build && cd build
-  cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
-  make -j4
+cd ~/
+git clone https://github.com/ArduPilot/ardupilot_gazebo
+cd ardupilot_gazebo
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+make -j4
 ```
 
 Add required paths:
 
 Assuming that you have clone the repository in `$HOME/ardupilot_gazebo`:
 ```bash
-  echo 'export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:${GZ_SIM_SYSTEM_PLUGIN_PATH}' >> ~/.bashrc
-  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$HOME/ardupilot_gazebo/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
+echo 'export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:${GZ_SIM_SYSTEM_PLUGIN_PATH}' >> ~/.bashrc
+echo 'export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$HOME/ardupilot_gazebo/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 ```
 
 Reload your terminal with source ~/.bashrc
@@ -188,21 +190,21 @@ More info about the plugin can be found in the [repo](https://github.com/ArduPil
 
 Create new workspace:
 ```Bash
-  mkdir -p ~/tudelft_hackathon_ws/src
-  cd ~/tudelft_hackathon_ws
+mkdir -p ~/tudelft_hackathon_ws/src
+cd ~/tudelft_hackathon_ws
 ```
 
 Clone repos:
 ```Bash
-  wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
-  vcs import src < hackathon.rosinstall --recursive
+wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
+vcs import src < hackathon.rosinstall --recursive
 ```
 
 Add required paths:
 ```Bash
-  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
+echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/models:$HOME/tudelft_hackathon_ws/src/bluerov2_ignition/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 
-  echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
+echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 ```
 
 Before building the `ros_gz` package (one of the dependencies), you need to export the gazebo version:
@@ -211,18 +213,18 @@ Before building the `ros_gz` package (one of the dependencies), you need to expo
 export GZ_VERSION="garden"
 ```
 You can also add this to your `~/.bashrc` to make this process easier.
-    
+
 Install deps:
 ```Bash
-  source /opt/ros/humble/setup.bash
-  cd ~/tudelft_hackathon_ws/
-  rosdep install --from-paths src --ignore-src -r -y
+source /opt/ros/humble/setup.bash
+cd ~/tudelft_hackathon_ws/
+rosdep install --from-paths src --ignore-src -r -y
 ```
 
 Build project:
 ```Bash
-  cd ~/tudelft_hackathon_ws/
-  colcon build --symlink-install
+cd ~/tudelft_hackathon_ws/
+colcon build --symlink-install
 ```
 
 ## Run it with docker via CLI
@@ -230,33 +232,33 @@ Build project:
 Create docker network:
 
 ```Bash
- sudo docker network create ros_net
+sudo docker network create ros_net
 ```
 
 ### Run Ignition simulation + ardupilot SITL:
 
 If you a NVIDIA GPU:
 ```Bash
- xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all rezenders/ignition:hackathon-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+xhost +local:root
+sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --gpus all ghcr.io/remaro-network/tudelft_hackathon:nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an AMD GPU:
 ```Bash
- xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  rezenders/ignition:hackathon-non-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+xhost +local:root ;
+sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri --group-add video  ghcr.io/remaro-network/tudelft_hackathon:non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 If you have an Intel GPU:
 ```Bash
- xhost +local:root ;
- sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  rezenders/ignition:hackathon-non-nvidia-humble ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
+xhost +local:root ;
+sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --device=/dev/dri:/dev/dri  ghcr.io/remaro-network/tudelft_hackathon:non-nvidia ros2 launch tudelft_hackathon bluerov_ign_sim.launch.py ardusub:=true mavros_url:='bluerov:14551'
 ```
 
 ### Run bluerov software:
 
 ```Bash
- sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-hackathon-humble ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
+sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-hackathon-humble ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
 ### Development with docker via cli
