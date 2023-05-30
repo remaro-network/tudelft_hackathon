@@ -52,7 +52,7 @@ jobs:
       - name: Build and push gazebo garden image with ros humble
         uses: docker/build-push-action@v4
         with:
-          context: dockerfiles/ignition/igition-humble/
+          context: dockerfiles/ignition/ignition-humble/
           push: true
           tags: ${{ env.REGISTRY }}/remaro-network/ignition-humble:latest
           labels: latest
