@@ -36,7 +36,7 @@ def generate_launch_description():
         }.items(),
     )
 
-    #TODO: Pass x, y, z, R, P and Y as parameter
+    # TODO: Pass x, y, z, R, P and Y as parameter
     bluerov_spawn = Node(
         package='ros_gz_sim',
         executable='create',
@@ -55,7 +55,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=['lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan'],
-        remappings=[('/lidar','/scan')],
+        remappings=[('/lidar', '/scan')],
         output='screen'
     )
 
@@ -66,7 +66,10 @@ def generate_launch_description():
         ardusub_arg,
         mavros_url_arg,
         ExecuteProcess(
-            cmd=['sim_vehicle.py','-v', 'ArduSub', '-L', 'RATBeach', '--model=JSON','--out', LaunchConfiguration('mavros_url'), '--console'],
+            cmd=[
+                'sim_vehicle.py', '-v', 'ArduSub',
+                '-L', 'RATBeach', '--model=JSON',
+                '--out', LaunchConfiguration('mavros_url'), '--console'],
             output='screen',
             condition=IfCondition(LaunchConfiguration('ardusub'))
         ),

@@ -50,18 +50,20 @@ def generate_launch_description():
         default_value='1'
     )
 
-    mavros_node = Node(
-        package='mavros',
-        executable='mavros_node',
-        parameters=[{
+    mavros_path = get_package_share_directory('mavros')
+    mavros_launch_path = os.path.join(
+        mavros_path, 'launch', 'apm.launch')
+    mavros_node = IncludeLaunchDescription(
+        AnyLaunchDescriptionSource(mavros_launch_path),
+        launch_arguments={
             'fcu_url': LaunchConfiguration('fcu_url'),
             'gcs_url': LaunchConfiguration('gcs_url'),
             'system_id': LaunchConfiguration('system_id'),
             'component_id': LaunchConfiguration('component_id'),
             'target_system_id': LaunchConfiguration('target_system_id'),
             'target_component_id': LaunchConfiguration('target_component_id'),
-        }]
-    )
+            }.items()
+        )
 
     agent_node = Node(
         package='tudelft_hackathon',
@@ -93,8 +95,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(pkg_tudelft_hackathon,
-                                'launch',
-                                'bluerov_ign_sim.launch.py')),
+                             'launch',
+                             'bluerov_ign_sim.launch.py')),
             condition=IfCondition(LaunchConfiguration('simulation'))
         ),
         mavros_node,
@@ -102,7 +104,7 @@ def generate_launch_description():
             package='ping360_sonar',
             executable='ping360_node',
             parameters=[{
-                'angle_sector' : 90,
+                'angle_sector': 90,
                 'connection_type': 'udp',
                 'udp_address': '192.168.2.2',
                 'udp_port': 9092,
