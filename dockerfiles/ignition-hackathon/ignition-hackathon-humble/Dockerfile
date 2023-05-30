@@ -18,7 +18,7 @@ RUN rosdep init
 USER docker
 
 WORKDIR /home/docker/
-RUN git clone https://github.com/ArduPilot/ardupilot_gazebo.git -b ignition-garden
+RUN git clone https://github.com/ArduPilot/ardupilot_gazebo.git
 
 WORKDIR /home/docker/ardupilot_gazebo
 
