@@ -1,4 +1,5 @@
-FROM rezenders/ignition:humble
+ARG BASE_IMAGE="ghcr.io/remaro-network/ignition-humble:latest"
+FROM $BASE_IMAGE
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -36,16 +37,24 @@ USER docker
 ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /home/docker/
-RUN git clone https://github.com/ArduPilot/ardupilot.git --recurse
+RUN git clone https://github.com/ArduPilot/ardupilot.git
 WORKDIR /home/docker/ardupilot
-RUN git checkout c623ae8
+RUN git checkout 94ba4ec
+RUN git submodule update --init --recursive
 
 # RUN git config --global --add safe.directory /ardupilot
+WORKDIR /home/docker/ardupilot/Tools/environment_install/
+RUN rm install-prereqs-ubuntu.sh
+RUN wget https://raw.githubusercontent.com/ArduPilot/ardupilot/master/Tools/environment_install/install-prereqs-ubuntu.sh
+WORKDIR /home/docker/ardupilot
+RUN chmod +x Tools/environment_install/install-prereqs-ubuntu.sh
 RUN USER=docker Tools/environment_install/install-prereqs-ubuntu.sh -y
 RUN . ~/.profile
 
-ENV PATH=/opt/gcc-arm-none-eabi-6-2017-q2-update/bin:$PATH
-ENV PATH=$PATH:/home/docker/ardupilot/Tools/autotest
+RUN sudo pip3 install -U mavproxy PyYAML
+
+ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
+ENV PATH=$PATH:$HOME/ardupilot/Tools/autotest
 ENV PATH=/usr/lib/ccache:$PATH
 
 WORKDIR /home/docker/ardupilot
