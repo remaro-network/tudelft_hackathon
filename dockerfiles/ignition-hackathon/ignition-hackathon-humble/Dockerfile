@@ -35,20 +35,20 @@ WORKDIR /home/docker/tudelft_hackathon_ws/
 RUN wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
 RUN vcs import src < hackathon.rosinstall --recursive
 
-USER root
+USER docker
 
 WORKDIR /home/docker/tudelft_hackathon_ws/src/mavros/mavros/scripts
-RUN [ "/bin/bash","-c","apt update \
+RUN [ "/bin/bash","-c","sudo apt update \
             && ./install_geographiclib_datasets.sh \
             && rm -rf /var/lib/apt/lists/"]
 
 WORKDIR /home/docker/tudelft_hackathon_ws/
 RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
-            && apt update && rosdep update \
-            && rosdep install --from-paths src --ignore-src -r -y \
+            && sudo apt update && rosdep update \
+            && sudo rosdep install --from-paths src --ignore-src -r -y \
             && rm -rf /var/lib/apt/lists/"]
 
-USER docker
+# USER docker
 ENV GZ_VERSION="garden"
 RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
             && colcon build --symlink-install"]
