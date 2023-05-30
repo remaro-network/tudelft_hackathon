@@ -75,19 +75,20 @@ jobs:
           # labels: ${{ steps.meta.outputs.labels }}
           build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/ignition-ardusub-humble:latest
 
-      - name: Build and push ignition hackathon nvidia image
-        uses: docker/build-push-action@v4
-        with:
-          context: dockerfiles/ignition-hackathon-gpus/ignition-hackathon-nvidia/ignition-hackathon-nvidia-humble/
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/tudelft_hackathon_base:latest
-
       - name: Build and push ignition hackathon non nvidia image
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/ignition-hackathon-gpus/ignition-hackathon-non-nvidia/ignition-hackathon-non-nvidia-humble/
           push: true
           tags: ${{ env.REGISTRY }}/remaro-network/tudelft_hackathon:non-nvidia
+          build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/tudelft_hackathon_base:latest
+
+      - name: Build and push ignition hackathon nvidia image
+        uses: docker/build-push-action@v4
+        with:
+          context: dockerfiles/ignition-hackathon-gpus/ignition-hackathon-nvidia/ignition-hackathon-nvidia-humble/
+          push: true
+          # tags: ${{ steps.meta.outputs.tags }}
+          # labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/remaro-network/tudelft_hackathon:nvidia
           build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/tudelft_hackathon_base:latest
