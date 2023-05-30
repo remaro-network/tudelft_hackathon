@@ -13,8 +13,6 @@ RUN apt update && apt install -y --no-install-recommends \
   python3-colcon-common-extensions \
   && rm -rf /var/lib/apt/lists/
 
-RUN rosdep init
-
 USER docker
 
 WORKDIR /home/docker/
@@ -35,20 +33,15 @@ WORKDIR /home/docker/tudelft_hackathon_ws/
 RUN wget https://raw.githubusercontent.com/remaro-network/tudelft_hackathon/ros2/hackathon.rosinstall
 RUN vcs import src < hackathon.rosinstall --recursive
 
-USER docker
+RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \
+      && sudo apt update \
+      && sudo rosdep init \
+      && rosdep update \
+      && rosdep install --from-paths src --ignore-src -r -y \
+      && sudo rm -rf /var/lib/apt/lists/"]
 
-WORKDIR /home/docker/tudelft_hackathon_ws/src/mavros/mavros/scripts
-RUN [ "/bin/bash","-c","sudo apt update \
-            && ./install_geographiclib_datasets.sh \
-            && rm -rf /var/lib/apt/lists/"]
+RUN ["/bin/bash", "-c", "sudo ./src/mavros/mavros/scripts/install_geographiclib_datasets.sh"]
 
-WORKDIR /home/docker/tudelft_hackathon_ws/
-RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
-            && sudo apt update && rosdep update \
-            && sudo rosdep install --from-paths src --ignore-src -r -y \
-            && rm -rf /var/lib/apt/lists/"]
-
-# USER docker
 ENV GZ_VERSION="garden"
 RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
             && colcon build --symlink-install"]
