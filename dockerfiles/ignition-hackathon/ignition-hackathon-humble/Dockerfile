@@ -49,16 +49,12 @@ RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
             && rm -rf /var/lib/apt/lists/"]
 
 USER docker
+ENV GZ_VERSION="garden"
 RUN [ "/bin/bash","-c","source /opt/ros/humble/setup.bash \
             && colcon build --symlink-install"]
 
 ENV GZ_SIM_RESOURCE_PATH=/home/docker/tudelft_hackathon_ws/src/bluerov2_ignition/models:/home/docker/bluerov2_ignition/worlds:${GZ_SIM_RESOURCE_PATH}
 ENV GZ_SIM_RESOURCE_PATH=/home/docker/tudelft_hackathon_ws/src/remaro_worlds/models:/home/docker/tudelft_hackathon_ws/src/remaro_worlds/worlds:${GZ_SIM_RESOURCE_PATH}
-
-WORKDIR /home/docker/tudelft_hackathon_ws/src/mavros/mavros/scripts
-RUN [ "/bin/bash","-c","apt update \
-            && ./install_geographiclib_datasets.sh \
-            && rm -rf /var/lib/apt/lists/"]
 
 WORKDIR /home/docker/tudelft_hackathon_ws/
 
