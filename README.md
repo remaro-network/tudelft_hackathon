@@ -205,6 +205,13 @@ Add required paths:
   echo 'export GZ_SIM_RESOURCE_PATH=$HOME/tudelft_hackathon_ws/src/remaro_worlds/models:$HOME/tudelft_hackathon_ws/src/remaro_worlds/worlds:${GZ_SIM_RESOURCE_PATH}' >> ~/.bashrc
 ```
 
+Before building the `ros_gz` package (one of the dependencies), you need to export the gazebo version:
+
+```
+export GZ_VERSION="garden"
+```
+You can also add this to your `~/.bashrc` to make this process easier.
+    
 Install deps:
 ```Bash
   source /opt/ros/humble/setup.bash
