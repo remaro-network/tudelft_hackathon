@@ -1,4 +1,5 @@
-FROM rezenders/ignition:hackathon-humble
+ARG BASE_IMAGE="ghcr.io/remaro-network/tudelft_hackathon_base:latest"
+FROM $BASE_IMAGE
 
 USER root
 RUN apt update && apt install -y --no-install-recommends \

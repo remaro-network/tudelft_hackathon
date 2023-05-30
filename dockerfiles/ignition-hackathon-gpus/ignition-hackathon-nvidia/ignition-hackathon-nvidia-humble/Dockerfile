@@ -1,4 +1,5 @@
-FROM rezenders/ignition:hackathon-humble
+ARG BASE_IMAGE="ghcr.io/remaro-network/tudelft_hackathon_base:latest"
+FROM $BASE_IMAGE
 
 ENV NVIDIA_VISIBLE_DEVICES \
    ${NVIDIA_VISIBLE_DEVICES:-all}
