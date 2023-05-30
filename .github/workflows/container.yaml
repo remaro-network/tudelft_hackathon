@@ -87,7 +87,7 @@ jobs:
       - name: Build and push ignition hackathon non nvidia image
         uses: docker/build-push-action@v4
         with:
-          context: dockerfiles/ignition-hackathon-gpus/ignition-hackathon-non-nvidia/
+          context: dockerfiles/ignition-hackathon-gpus/ignition-hackathon-non-nvidia/ignition-hackathon-non-nvidia-humble/
           push: true
           tags: ${{ env.REGISTRY }}/remaro-network/tudelft_hackathon:non-nvidia
           build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/tudelft_hackathon_base:latest
