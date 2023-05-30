@@ -73,5 +73,4 @@ jobs:
           # tags: ${{ env.REGISTRY }}/remaro-network/hackathon:latest
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          labels: ${{ steps.meta.outputs.labels }}
           build-args: BASE_IMAGE=${{ env.REGISTRY }}/remaro-network/ignition-ardusub-humble:latest
