@@ -258,7 +258,7 @@ sudo docker run -it --rm --name ignition --net ros_net -e DISPLAY=$DISPLAY -v /t
 ### Run bluerov software:
 
 ```Bash
-sudo docker run -it --rm --name bluerov --net ros_net rezenders/ros-hackathon-humble ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
+sudo docker run -it --rm --name bluerov --net ros_net ghcr.io/remaro-network/tudelft_hackathon_base:latest ros2 launch tudelft_hackathon bluerov_bringup_no_ign.launch.py fcu_url:=udp://:14551@ignition:14555
 ```
 
 ### Development with docker via cli
