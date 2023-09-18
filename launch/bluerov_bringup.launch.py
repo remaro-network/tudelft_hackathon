@@ -8,15 +8,16 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
+    pkg_tudelft_hackathon = get_package_share_directory('tudelft_hackathon')
+
     simulation_arg = LaunchConfiguration('simulation')
     fcu_url_arg = LaunchConfiguration('fcu_url')
     gcs_url_arg = LaunchConfiguration('gcs_url')
-    system_id_arg = LaunchConfiguration('system_id')
-    component_id_arg = LaunchConfiguration('component_id')
     tgt_system_arg = LaunchConfiguration('target_system_id')
     tgt_component_arg = LaunchConfiguration('target_component_id')
 
@@ -30,38 +31,32 @@ def generate_launch_description():
         default_value='udp://@localhost:14550'
     )
 
-    system_id_arg = DeclareLaunchArgument(
-        'system_id',
-        default_value='255'
-    )
-
-    component_id_arg = DeclareLaunchArgument(
-        'component_id',
-        default_value='240'
-    )
-
     tgt_system_arg = DeclareLaunchArgument(
-        'target_system_id',
+        'tgt_system',
         default_value='1'
     )
 
     tgt_component_arg = DeclareLaunchArgument(
-        'target_component_id',
+        'tgt_component',
         default_value='1'
     )
 
     mavros_path = get_package_share_directory('mavros')
     mavros_launch_path = os.path.join(
-        mavros_path, 'launch', 'apm.launch')
+        mavros_path, 'launch', 'node.launch')
+    hackathon_apm_config_path = os.path.join(
+        pkg_tudelft_hackathon, 'launch', 'apm_config.yaml')
+    hackathon_apm_plugin_path = os.path.join(
+        pkg_tudelft_hackathon, 'launch', 'apm_pluginlists.yaml')
     mavros_node = IncludeLaunchDescription(
         AnyLaunchDescriptionSource(mavros_launch_path),
         launch_arguments={
             'fcu_url': LaunchConfiguration('fcu_url'),
             'gcs_url': LaunchConfiguration('gcs_url'),
-            'system_id': LaunchConfiguration('system_id'),
-            'component_id': LaunchConfiguration('component_id'),
-            'target_system_id': LaunchConfiguration('target_system_id'),
-            'target_component_id': LaunchConfiguration('target_component_id'),
+            'tgt_system': LaunchConfiguration('tgt_system'),
+            'tgt_component': LaunchConfiguration('tgt_component'),
+            'config_yaml': hackathon_apm_config_path,
+            'pluginlists_yaml': hackathon_apm_plugin_path,
             }.items()
         )
 
@@ -71,13 +66,9 @@ def generate_launch_description():
         output='screen'
     )
 
-    pkg_tudelft_hackathon = get_package_share_directory('tudelft_hackathon')
-
     return LaunchDescription([
         simulation_arg,
         gcs_url_arg,
-        system_id_arg,
-        component_id_arg,
         tgt_system_arg,
         tgt_component_arg,
         # Real robot
