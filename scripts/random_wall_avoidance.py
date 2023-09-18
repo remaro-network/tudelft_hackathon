@@ -9,6 +9,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from mavros_wrapper.ardusub_wrapper import *
 
+
 def laser_scan_cb(msg, ardusub):
     min_distance = 1.5
     yaw_speed = 0.3
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
     print("ALT HOLD mode selected")
 
-    while ardusub.status.armed == False:
+    while ardusub.status.armed is False:
         ardusub.arm_motors(True)
         service_timer.sleep()
 

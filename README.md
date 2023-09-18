@@ -286,8 +286,14 @@ echo "source ~/tudelft_hackathon_ws/install/setup.bash" >> ~/.bashrc
 ```
 Don't forget to re-open your terminal after altering the `~/.bashrc` file.
 
+In one terminal run ardusub SITL:
 ```Bash
- ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=true
+  sim_vehicle.py -L RATBeach -v ArduSub  --model=JSON --console
+```
+
+In another terminal run the simulation + mavros + agent:
+```Bash
+ ros2 launch tudelft_hackathon bluerov_bringup.launch.py simulation:=true ardusub:=false
 ```
 
 ### Bluerov2
